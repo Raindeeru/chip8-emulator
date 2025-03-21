@@ -1,0 +1,10 @@
+^C:\DEV\CHIP8\BUILD\CMAKEFILES\CE209DBD99C5DA3FE323F57680CFD73D\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/dev/chip8 -BC:/dev/chip8/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/dev/chip8/build/chip8.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

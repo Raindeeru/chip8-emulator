@@ -27,5 +27,6 @@ extern std::uint8_t VD;
 extern std::uint8_t VE;
 extern std::uint8_t VF;
 
+void Chip8_Init();
 
 #endif

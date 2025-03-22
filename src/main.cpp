@@ -1,50 +1,51 @@
+#include "SDL3/SDL_error.h"
+#include "SDL3/SDL_events.h"
+#include "SDL3/SDL_init.h"
+#include "SDL3/SDL_oldnames.h"
+#include "SDL3/SDL_pixels.h"
+#include "SDL3/SDL_stdinc.h"
+#include "SDL3/SDL_surface.h"
+#include "SDL3/SDL_video.h"
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
+#include <cstddef>
+#include <cstdlib>
 #include <iostream>
 
-int main(int argc, char* argv[]) {
-    SDL_Init(SDL_INIT_VIDEO);
+#define PIXEL_SCALE 10
 
-    SDL_Window* win = SDL_CreateWindow("SDL3 Project",640, 480, 0);
-    if (win == nullptr) {
-        std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return 1;
+int main(int argc, char *argv[]){
+   SDL_Init(SDL_INIT_VIDEO);
+   SDL_Init(SDL_INIT_EVENTS);
+
+   SDL_Window* win = SDL_CreateWindow("Chip-8", 64*PIXEL_SCALE, 32*PIXEL_SCALE, SDL_WINDOW_OPENGL);
+   if (!win){
+       std::cout<<"Failed to create window! Error: " << SDL_GetError() << "\n";
+   }
+   SDL_Surface* winSurface = SDL_GetWindowSurface(win);
+   const SDL_PixelFormatDetails* winFormatDetails = SDL_GetPixelFormatDetails(winSurface->format);
+   SDL_FillSurfaceRect(winSurface, NULL, SDL_MapRGB(winFormatDetails, NULL, 255, 255, 255));
+   
+   bool running = true;
+
+   while(running){
+       SDL_Event event;
+       if(SDL_PollEvent(&event)>0){
+              switch (event.type) {
+                  case SDL_EVENT_KEY_DOWN:
+                      SDL_log(event.key.key);
+                      std::cout << event.key.key << "\n" << event.key.scancode << "\n";
+                      SDL_log(event.key.scancode);
+                      running = false;
+                      break;
+               } 
     }
+   }
+   
+   SDL_DestroyWindow(win);
+   win = NULL;
+   winSurface = NULL;
 
-    SDL_Renderer* ren = SDL_CreateRenderer(win, NULL);
-    if (ren == nullptr) {
-        std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-        SDL_DestroyWindow(win);
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Event e;
-    bool quit = false;
-
-    // Define a rectangle
-    SDL_FRect greenSquare {270, 190, 100, 100};
-
-    while (!quit) {
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_EVENT_QUIT) {
-                quit = true;
-            }
-        }
-
-        SDL_SetRenderDrawColor(ren, 0, 0, 0, 255); // Set render draw color to black
-        SDL_RenderClear(ren); // Clear the renderer
-
-        SDL_SetRenderDrawColor(ren, 0, 255, 0, 255); // Set render draw color to green
-        SDL_RenderFillRect(ren, &greenSquare); // Render the rectangle
-        
-        SDL_RenderPresent(ren); // Render the screen
-    }
-
-    SDL_DestroyRenderer(ren);
-    SDL_DestroyWindow(win);
-    SDL_Quit();
-
-    return 0;
-}    
-
+   SDL_Quit();
+   return 0;
+}

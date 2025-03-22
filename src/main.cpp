@@ -11,16 +11,20 @@
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
+#include "chip8/fonts.h"
 #include "chip8/specs.h"
 
 #define PIXEL_SCALE 10
 
 int main(int argc, char *argv[]){
-    Chip8_Init();
+    Chip8_Init(); 
+    loadFont(std_font, ram, 80);
+
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Init(SDL_INIT_EVENTS);
-
+    
     SDL_Window* win = SDL_CreateWindow("Chip-8", 64*PIXEL_SCALE, 32*PIXEL_SCALE, SDL_WINDOW_OPENGL);
+    
     if (!win){
         std::cout<<"Failed to create window! Error: " << SDL_GetError() << "\n";
     }

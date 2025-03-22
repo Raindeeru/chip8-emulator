@@ -1,7 +1,6 @@
 #include "SDL3/SDL_error.h"
 #include "SDL3/SDL_events.h"
 #include "SDL3/SDL_init.h"
-#include "SDL3/SDL_oldnames.h"
 #include "SDL3/SDL_pixels.h"
 #include "SDL3/SDL_stdinc.h"
 #include "SDL3/SDL_surface.h"
@@ -9,6 +8,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <cstddef>
+#include <cstdint>
 #include <cstdlib>
 #include <iostream>
 

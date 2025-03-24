@@ -3,6 +3,7 @@
 #include "SDL3/SDL_init.h"
 #include "SDL3/SDL_oldnames.h"
 #include "SDL3/SDL_pixels.h"
+#include "SDL3/SDL_rect.h"
 #include "SDL3/SDL_render.h"
 #include "SDL3/SDL_scancode.h"
 #include "SDL3/SDL_stdinc.h"
@@ -14,7 +15,9 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
+#include <string>
 #include "chip8/fonts.h"
 #include "chip8/specs.h"
 
@@ -75,7 +78,15 @@ int main(int argc, char *argv[]){
         }
         
         //render stufff here
-        
+       
+        void* rawPixels = NULL;
+        int pitch = 0;
+
+        if(SDL_LockTexture(tex, NULL, &rawPixels, &pitch) == false){
+            std::cout << "Could not lock texture! " << SDL_GetError() << "\n";
+            return 1;
+        }
+
         for(int i = 0; i < 64*32; i++){
             if(i == white_point){
                 pixel_display[i] = 0xFFFFFFFF;
@@ -83,14 +94,25 @@ int main(int argc, char *argv[]){
                 pixel_display[i] = 0x0;
             }
         }
-        
+
+
+        memcpy((uint8_t*)rawPixels, pixel_display, sizeof(uint32_t)*64*32);
+        SDL_UnlockTexture(tex);
         white_point ++;
         white_point %= 64*32;
-        
-        SDL_UpdateTexture(tex, NULL, pixel_display, 64 * sizeof(uint32_t));
-        //clearing renderer
+         
+        //putting pixels to the renderere
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
         SDL_RenderTexture(renderer, tex, NULL, NULL);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        
+        //Debug stuff here
+        std::string debug = "Test Text";
+        if(!(SDL_RenderDebugText(renderer, 10, 10, debug.c_str()))){
+            std::cout << "Could not render debug test " << SDL_GetError() << "\n"; 
+        }
         SDL_RenderPresent(renderer);
 
         lastUpdateTime = currentTime;

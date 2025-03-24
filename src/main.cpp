@@ -19,10 +19,11 @@
 #include <iostream>
 #include <string>
 #include "chip8/fonts.h"
+#include "chip8/instructions.h"
 #include "chip8/specs.h"
 
 #define PIXEL_SCALE 10
-#define FPS 60
+#define FPS 700
 
 int main(int argc, char *argv[]){
     Chip8_Init(); 
@@ -54,6 +55,8 @@ int main(int argc, char *argv[]){
     int32_t tickInterval = 1000/FPS;
     uint32_t lastUpdateTime = 0;
     int32_t deltaTime = 0;
+    
+    DecodeOpcode((uint16_t)0xABCD);
 
     while(running){
         //check if exiting
@@ -77,6 +80,7 @@ int main(int argc, char *argv[]){
             SDL_Delay(timeToSleep);
         }
         
+        lastUpdateTime = currentTime;
         //render stufff here
        
         void* rawPixels = NULL;
@@ -98,14 +102,14 @@ int main(int argc, char *argv[]){
 
         memcpy((uint8_t*)rawPixels, pixel_display, sizeof(uint32_t)*64*32);
         SDL_UnlockTexture(tex);
-        white_point ++;
-        white_point %= 64*32;
+        white_point = (white_point + 1)%(64*32);
          
         //putting pixels to the renderere
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
         SDL_RenderTexture(renderer, tex, NULL, NULL);
+        
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         
         //Debug stuff here
@@ -115,7 +119,6 @@ int main(int argc, char *argv[]){
         }
         SDL_RenderPresent(renderer);
 
-        lastUpdateTime = currentTime;
     }
 
     SDL_DestroyWindow(win);

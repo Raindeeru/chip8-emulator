@@ -10,6 +10,9 @@
     <ClCompile Include="C:\dev\chip8\src\chip8\specs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\dev\chip8\src\chip8\instructions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\dev\chip8\CMakeLists.txt" />

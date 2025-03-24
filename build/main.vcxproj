@@ -327,6 +327,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\dev\chip8\src\main.cpp" />
     <ClCompile Include="C:\dev\chip8\src\chip8\fonts.cpp" />
     <ClCompile Include="C:\dev\chip8\src\chip8\specs.cpp" />
+    <ClCompile Include="C:\dev\chip8\src\chip8\instructions.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

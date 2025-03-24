@@ -1,8 +1,7 @@
 //Here I need to decode the opcodes given in bytes
 #include <cstdint>
-#include <ios>
-#include <iostream>
 #include "instructions.h"
+#include "specs.h"
 
 #define NIBBLE 4
 #define TYPE_MASK 0xF000
@@ -23,8 +22,8 @@ void ReturnSubroutine(){
 }
 
 //1NNN
-void Jump(){
-
+void Jump(uint16_t NNN){
+    pc =  NNN;
 }
 
 //2NNN
@@ -38,7 +37,7 @@ void JumpEqVXNN(){
 }
 
 //4XNN
-void JumpEqVXNN(){
+void JumpNqVXNN(){
 
 }
 
@@ -48,13 +47,13 @@ void JumpEqVXVY(){
 }
 
 //6XNN
-void SetVXNN(){
-
+void SetVXNN(uint16_t X, uint16_t NN){
+    V[X] = (uint8_t)NN; 
 }
 
 //7XNN
-void AddVXNN(){
-
+void AddVXNN(uint16_t X, uint16_t NN){ 
+    V[X] += (uint8_t)NN; 
 }
 
 //8XY0
@@ -109,8 +108,8 @@ void JumpNqVXVY(){
 }
 
 //ANNN
-void SetIndexRegister(){
-
+void SetIndexRegister(uint16_t NNN){
+    I = NNN;
 }
 
 //BNNN

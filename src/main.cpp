@@ -16,6 +16,9 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include <fstream>
+#include <ios>
+#include <iosfwd>
 #include <iostream>
 #include <string>
 #include "chip8/fonts.h"
@@ -23,11 +26,34 @@
 #include "chip8/specs.h"
 
 #define PIXEL_SCALE 10
-#define FPS 700
+#define FPS 60
+
+void LoadRom(){
+    char * memblock;
+    std::streampos size;
+
+    std::ifstream file ("ibm.ch8", std::ios::in|std::ios::binary|std::ios::ate);
+    if (file.is_open())
+    {
+        size = file.tellg();
+        memblock = new char[size];
+        file.seekg (0, std::ios::beg);
+        file.read (memblock, size);
+        file.close();
+
+        std::cout << "the entire file content is in memory";
+
+        memcpy(ram + 0x200, memblock, size);
+
+        delete[] memblock;
+    }
+    else std::cout << "Unable to open file";
+}
 
 int main(int argc, char *argv[]){
     Chip8_Init(); 
     loadFont(std_font, ram, 80);
+    LoadRom();
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Init(SDL_INIT_EVENTS);
@@ -50,8 +76,6 @@ int main(int argc, char *argv[]){
 
     uint32_t pixel_display[64*32] = {0};
     
-    int white_point = 0;
-
     int32_t tickInterval = 1000/FPS;
     uint32_t lastUpdateTime = 0;
     int32_t deltaTime = 0;
@@ -81,31 +105,25 @@ int main(int argc, char *argv[]){
         }
         
         lastUpdateTime = currentTime;
+
+        //fetch decode execute logic here
+        display[0] = 1;
+
         //render stufff here
-       
         void* rawPixels = NULL;
         int pitch = 0;
 
+        for(int i = 0; i < 64*32; i++){
+            pixel_display[i] = display[i] > 0 ? 0xFFFFFFFF : 0x00000000;
+        }
         if(SDL_LockTexture(tex, NULL, &rawPixels, &pitch) == false){
             std::cout << "Could not lock texture! " << SDL_GetError() << "\n";
             return 1;
         }
 
-        for(int i = 0; i < 64*32; i++){
-            if(i == white_point){
-                pixel_display[i] = 0xFFFFFFFF;
-            }else{
-                pixel_display[i] = 0x0;
-            }
-        }
-
-
         memcpy((uint8_t*)rawPixels, pixel_display, sizeof(uint32_t)*64*32);
         SDL_UnlockTexture(tex);
-        white_point = (white_point + 1)%(64*32);
          
-        //putting pixels to the renderere
-
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
         SDL_RenderTexture(renderer, tex, NULL, NULL);
@@ -117,6 +135,7 @@ int main(int argc, char *argv[]){
         if(!(SDL_RenderDebugText(renderer, 10, 10, debug.c_str()))){
             std::cout << "Could not render debug test " << SDL_GetError() << "\n"; 
         }
+
         SDL_RenderPresent(renderer);
 
     }

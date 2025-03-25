@@ -26,7 +26,7 @@
 #include "chip8/specs.h"
 
 #define PIXEL_SCALE 10
-#define FPS 60
+#define FPS 700
 
 void LoadRom(){
     char * memblock;
@@ -41,7 +41,7 @@ void LoadRom(){
         file.read (memblock, size);
         file.close();
 
-        std::cout << "the entire file content is in memory";
+        std::cout << "the entire file content is in memory\n";
 
         memcpy(ram + 0x200, memblock, size);
 
@@ -107,7 +107,17 @@ int main(int argc, char *argv[]){
         lastUpdateTime = currentTime;
 
         //fetch decode execute logic here
-        display[0] = 1;
+        //fetch
+       
+        uint16_t opcode = 0x0;
+        opcode += ram[pc] << 8;
+        opcode += ram[pc+1];
+        std::cout << std::hex << opcode << "\n";
+
+        pc += 2;
+        if(pc > 0x1000) pc = 0x200;
+        //decode execute
+        DecodeOpcode(opcode);
 
         //render stufff here
         void* rawPixels = NULL;
@@ -131,8 +141,8 @@ int main(int argc, char *argv[]){
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         
         //Debug stuff here
-        std::string debug = "Test Text";
-        if(!(SDL_RenderDebugText(renderer, 10, 10, debug.c_str()))){
+        std::string debug = std::to_string(pc);
+        if( !(SDL_RenderDebugText(renderer, 10, 10, debug.c_str())) ){
             std::cout << "Could not render debug test " << SDL_GetError() << "\n"; 
         }
 

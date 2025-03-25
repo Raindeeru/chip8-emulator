@@ -17,8 +17,8 @@ std::uint8_t sound;
 std::uint8_t V[16] = {0};
 
 void Chip8_Init() {
-  pc = 0;
-  I = 0;
+  pc = 0x200;
+  I = 0x0;
   delay = 0;
   sound = 0;
 

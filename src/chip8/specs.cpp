@@ -6,7 +6,8 @@ std::uint8_t ram[4096] = {0};
 std::uint16_t pc;
 std::uint16_t I;
 
-std::uint16_t stack[2] = {0};
+std::uint16_t stack[16] = {0};
+std::uint8_t sp = 0;
 
 std::uint8_t display[64 * 32] = {0};
 

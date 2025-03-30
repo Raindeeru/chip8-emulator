@@ -26,7 +26,8 @@
 #include "chip8/specs.h"
 
 #define PIXEL_SCALE 10
-#define FPS 700
+#define FPS 60
+#define IPF 11
 
 void LoadRom(){
     char * memblock;
@@ -108,16 +109,17 @@ int main(int argc, char *argv[]){
 
         //fetch decode execute logic here
         //fetch
-       
-        uint16_t opcode = 0x0;
-        opcode += ram[pc] << 8;
-        opcode += ram[pc+1];
-        std::cout << std::hex << opcode << "\n";
 
-        pc += 2;
-        if(pc > 0x1000) pc = 0x200;
-        //decode execute
-        DecodeOpcode(opcode);
+        for (int i = 0; i < IPF; i++) {
+            uint16_t opcode = 0x0;
+            opcode += ram[pc] << 8;
+            opcode += ram[pc+1];
+
+            pc += 2;
+            if(pc > 0x1000) pc = 0x200;
+            //decode execute
+            DecodeOpcode(opcode);
+        } 
 
         //render stufff here
         void* rawPixels = NULL;

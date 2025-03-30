@@ -2,3 +2,4 @@ C:\dev\chip8\src\main.cpp;C:\dev\chip8\build\main.dir\Debug\main.obj
 C:\dev\chip8\src\chip8\fonts.cpp;C:\dev\chip8\build\main.dir\Debug\fonts.obj
 C:\dev\chip8\src\chip8\specs.cpp;C:\dev\chip8\build\main.dir\Debug\specs.obj
 C:\dev\chip8\src\chip8\instructions.cpp;C:\dev\chip8\build\main.dir\Debug\instructions.obj
+C:\dev\chip8\src\chip8\input.cpp;C:\dev\chip8\build\main.dir\Debug\input.obj

@@ -1,0 +1,19 @@
+#include "resource.h"
+IDR_MENU MENU
+
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "Load Rom", ID_LOAD_ROM
+    END
+    POPUP "Quirks"
+    BEGIN
+        MENUITEM "VF Reset", ID_VF_RESET 
+        MENUITEM "Memory", ID_MEMORY
+        MENUITEM "Display Wait", ID_DISPLAY_WAIT
+        MENUITEM "Clipping", ID_CLIPPING
+        MENUITEM "Shifting", ID_SHIFTING
+        MENUITEM "Jumping", ID_JUMPING
+    END
+END
+    

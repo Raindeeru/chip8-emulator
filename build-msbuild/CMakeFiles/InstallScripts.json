@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/dev/chip8/build-msbuild/cmake_install.cmake",
+		"C:/dev/chip8/build-msbuild/vendored/SDL/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

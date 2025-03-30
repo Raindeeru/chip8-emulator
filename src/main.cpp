@@ -1,3 +1,4 @@
+#include <windows.h>
 #include "SDL3/SDL_error.h"
 #include "SDL3/SDL_events.h"
 #include "SDL3/SDL_init.h"
@@ -22,18 +23,21 @@
 #include <iostream>
 #include <string>
 #include "chip8/fonts.h"
+#include "chip8/input.h"
 #include "chip8/instructions.h"
 #include "chip8/specs.h"
+#include "../res/resource.h"
 
 #define PIXEL_SCALE 10
 #define FPS 60
 #define IPF 11
 
-void LoadRom(){
+void LoadRom(std::string rom_path){
     char * memblock;
     std::streampos size;
 
-    std::ifstream file ("ibm.ch8", std::ios::in|std::ios::binary|std::ios::ate);
+    std::cout<< "Loaded: "<<rom_path;
+    std::ifstream file (rom_path.c_str(), std::ios::in|std::ios::binary|std::ios::ate);
     if (file.is_open())
     {
         size = file.tellg();
@@ -54,12 +58,19 @@ void LoadRom(){
 int main(int argc, char *argv[]){
     Chip8_Init(); 
     loadFont(std_font, ram, 80);
-    LoadRom();
+    LoadRom(argv[1]);
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Init(SDL_INIT_EVENTS);
     
     SDL_Window* win = SDL_CreateWindow("Chip-8", 64*PIXEL_SCALE, 32*PIXEL_SCALE, SDL_WINDOW_OPENGL);
+    HWND hwnd = (HWND)SDL_GetPointerProperty(SDL_GetWindowProperties(win), SDL_PROP_WINDOW_WIN32_HWND_POINTER, NULL);
+    if(hwnd){
+        HMENU menu = LoadMenu(NULL, MAKEINTRESOURCE(IDR_MENU));
+        SetMenu(hwnd, menu);
+    }
+
+
     SDL_Renderer* renderer = SDL_CreateRenderer(win, NULL);
 
     SDL_Texture* tex = SDL_CreateTexture(
@@ -107,10 +118,17 @@ int main(int argc, char *argv[]){
         
         lastUpdateTime = currentTime;
 
+        //Input
+        UpdateKeymap();
+        //Delay and Sound
+        if(delay > 0) delay --;
+        if(sound > 0) sound --;
+         
         //fetch decode execute logic here
         //fetch
 
         for (int i = 0; i < IPF; i++) {
+            if(display_flag) break;
             uint16_t opcode = 0x0;
             opcode += ram[pc] << 8;
             opcode += ram[pc+1];
@@ -122,6 +140,7 @@ int main(int argc, char *argv[]){
         } 
 
         //render stufff here
+        display_flag = 0;
         void* rawPixels = NULL;
         int pitch = 0;
 

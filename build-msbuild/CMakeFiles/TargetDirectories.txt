@@ -1,0 +1,7 @@
+C:/dev/chip8/build-msbuild/CMakeFiles/main.dir
+C:/dev/chip8/build-msbuild/CMakeFiles/ALL_BUILD.dir
+C:/dev/chip8/build-msbuild/CMakeFiles/ZERO_CHECK.dir
+C:/dev/chip8/build-msbuild/vendored/SDL/CMakeFiles/SDL3-shared.dir
+C:/dev/chip8/build-msbuild/vendored/SDL/CMakeFiles/SDL3_test.dir
+C:/dev/chip8/build-msbuild/vendored/SDL/CMakeFiles/SDL_uclibc.dir
+C:/dev/chip8/build-msbuild/vendored/SDL/CMakeFiles/ALL_BUILD.dir

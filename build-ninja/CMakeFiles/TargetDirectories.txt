@@ -1,0 +1,8 @@
+/mnt/c/dev/chip8/build-ninja/CMakeFiles/main.dir
+/mnt/c/dev/chip8/build-ninja/CMakeFiles/edit_cache.dir
+/mnt/c/dev/chip8/build-ninja/CMakeFiles/rebuild_cache.dir
+/mnt/c/dev/chip8/build-ninja/vendored/SDL/CMakeFiles/SDL3-shared.dir
+/mnt/c/dev/chip8/build-ninja/vendored/SDL/CMakeFiles/SDL3_test.dir
+/mnt/c/dev/chip8/build-ninja/vendored/SDL/CMakeFiles/SDL_uclibc.dir
+/mnt/c/dev/chip8/build-ninja/vendored/SDL/CMakeFiles/edit_cache.dir
+/mnt/c/dev/chip8/build-ninja/vendored/SDL/CMakeFiles/rebuild_cache.dir

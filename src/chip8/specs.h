@@ -8,12 +8,15 @@ extern std::uint16_t pc;
 extern std::uint16_t I;
 
 extern std::uint16_t stack[16];
-extern std::uint8_t sp;
+extern std::int8_t sp;
 
 extern std::uint8_t display[64 * 32];
+extern std::uint8_t keymap[16];
 
 extern std::uint8_t delay;
 extern std::uint8_t sound;
+
+extern std::uint8_t display_flag;
 
 
 //Registers

@@ -1,0 +1,13 @@
+{
+    "Quirks":{
+        "vf_reset": true,
+        "memory": true,
+        "display_wait": true,
+        "clipping": false,
+        "shifting": false,
+        "jumping": false
+    },
+    "RecentFiles":[
+
+    ]
+}

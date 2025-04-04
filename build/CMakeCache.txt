@@ -576,6 +576,15 @@ chip8_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 chip8_SOURCE_DIR:STATIC=C:/dev/chip8
 
+//The directory containing a CMake configuration file for nlohmann_json.
+nlohmann_json_DIR:PATH=nlohmann_json_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for vendored/nlohman.
+vendored/nlohman_DIR:PATH=vendored/nlohman_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for vendored/nlohmann.
+vendored/nlohmann_DIR:PATH=vendored/nlohmann_DIR-NOTFOUND
+
 
 ########################
 # INTERNAL cache entries

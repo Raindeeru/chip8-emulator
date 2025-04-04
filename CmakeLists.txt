@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 project(chip8)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
 message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
@@ -16,9 +18,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 
 # Create your game executable target as usual
-add_executable(main res/resource.h src/main.cpp res/menu.rc src/chip8/fonts.cpp src/chip8/specs.cpp src/chip8/instructions.cpp src/chip8/input.cpp)
+add_executable(main src/config/menu.cpp res/resource.h src/main.cpp res/menu.rc src/chip8/fonts.cpp src/chip8/specs.cpp src/chip8/instructions.cpp src/chip8/input.cpp)
 
 # Link to the actual SDL3 library.
 target_link_libraries(main PRIVATE SDL3::SDL3 user32 gdi32)
 
-configure_file(res/settings.ini ${CMAKE_BINARY_DIR}/settings.ini COPYONLY)
+configure_file(res/settings.json ${CMAKE_BINARY_DIR}/settings.json COPYONLY)
+configure_file(res/settings.json ${CMAKE_BINARY_DIR}/Debug/settings.json COPYONLY)

@@ -22,6 +22,13 @@ extern std::uint8_t display_flag;
 //Registers
 extern std::uint8_t V[16];
 
+extern bool vf_reset;
+extern bool memory;
+extern bool display_wait;
+extern bool clipping;
+extern bool shifting;
+extern bool jumping;
+
 void Chip8_Init();
 
 #endif

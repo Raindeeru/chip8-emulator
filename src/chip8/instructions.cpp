@@ -73,21 +73,24 @@ void SetVXVY(uint16_t X, uint16_t Y) { V[X] = V[Y]; }
 void Or(uint16_t X, uint16_t Y) { 
     V[X] |= V[Y]; 
     //Quirk ?
-    V[0xF] = 0;
+    if(vf_reset)
+        V[0xF] = 0;
 }
 
 // 8XY2
 void And(uint16_t X, uint16_t Y) { 
     V[X] &= V[Y];
     //Quirk ?
-    V[0xF] = 0;
+    if(vf_reset)
+        V[0xF] = 0;
 }
 
 // 8XY3
 void Xor(uint16_t X, uint16_t Y) { 
     V[X] ^= V[Y]; 
     //Quirk ?
-    V[0xF] = 0;
+    if(vf_reset)
+        V[0xF] = 0;
 }
 // 8XY4
 void AddVXVY(uint16_t X, uint16_t Y) {

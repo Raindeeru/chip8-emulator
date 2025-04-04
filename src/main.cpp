@@ -29,6 +29,7 @@
 #include "../res/resource.h"
 #include "config/menu.h"
 #include <shobjidl.h> 
+namespace fs = std::filesystem;
 
 #define PIXEL_SCALE 10
 #define FPS 60
@@ -36,7 +37,8 @@
 
 bool running = false;
 WNDPROC SDLWndProc = nullptr;
-
+fs::path settings_path;
+HMENU menu = NULL;
 
 LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -49,6 +51,24 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             std::cout << "Load Rom\n";
             LoadRom();
             break;
+        case ID_VF_RESET:
+            UpdateQuirk(VF_RESET, settings_path);
+            if (current_settings["Quirks"]["vf_reset"])
+                CheckMenuItem(menu, ID_VF_RESET, MF_CHECKED);
+            else
+                CheckMenuItem(menu, ID_VF_RESET, MF_UNCHECKED);
+        case ID_MEMORY:
+            UpdateQuirk(MEMORY, settings_path);
+            if (current_settings["Quirks"]["memory"])
+                CheckMenuItem(menu, ID_MEMORY, MF_CHECKED);
+            else
+                CheckMenuItem(menu, ID_MEMORY, MF_UNCHECKED);
+        case ID_DISPLAY_WAIT:
+            UpdateQuirk(DISPLAY_WAIT, settings_path);
+            if (current_settings["Quirks"]["display_wait"])
+                CheckMenuItem(menu, ID_DISPLAY_WAIT, MF_CHECKED);
+            else
+                CheckMenuItem(menu, ID_DISPLAY_WAIT, MF_UNCHECKED);
 
         default:
             break;
@@ -62,7 +82,9 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 int main(int argc, char *argv[])
 {
-    ParseSettings(argv);
+    fs::path exe_path = fs::path(argv[0]).parent_path();
+    settings_path = exe_path / "settings.json";
+    ParseSettings(settings_path);
     MSG msg = {};
 
 
@@ -78,7 +100,37 @@ int main(int argc, char *argv[])
     SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)MainWndProc);
     if (hwnd)
     {
-        HMENU menu = LoadMenu(NULL, MAKEINTRESOURCE(IDR_MENU));
+        menu = LoadMenu(NULL, MAKEINTRESOURCE(IDR_MENU));
+        if(current_settings["Quirks"]["vf_reset"])
+            CheckMenuItem(menu, ID_VF_RESET, MF_CHECKED);
+        else
+            CheckMenuItem(menu, ID_VF_RESET, MF_UNCHECKED);
+
+        if(current_settings["Quirks"]["memory"])
+            CheckMenuItem(menu, ID_MEMORY, MF_CHECKED);
+        else
+            CheckMenuItem(menu, ID_MEMORY, MF_UNCHECKED);
+
+        if(current_settings["Quirks"]["display_wait"])
+            CheckMenuItem(menu, ID_DISPLAY_WAIT, MF_CHECKED);
+        else
+            CheckMenuItem(menu, ID_DISPLAY_WAIT, MF_UNCHECKED);
+
+        if(current_settings["Quirks"]["clipping"])
+            CheckMenuItem(menu, ID_CLIPPING, MF_CHECKED);
+        else
+            CheckMenuItem(menu, ID_CLIPPING, MF_UNCHECKED);
+
+        if(current_settings["Quirks"]["shifting"])
+            CheckMenuItem(menu, ID_SHIFTING, MF_CHECKED);
+        else
+            CheckMenuItem(menu, ID_SHIFTING, MF_UNCHECKED);
+
+        if(current_settings["Quirks"]["jumping"])
+            CheckMenuItem(menu, ID_JUMPING, MF_CHECKED);
+        else
+            CheckMenuItem(menu, ID_JUMPING, MF_UNCHECKED);
+
         SetMenu(hwnd, menu);
     }
 
@@ -158,7 +210,7 @@ int main(int argc, char *argv[])
 
         for (int i = 0; i < IPF; i++)
         {
-            if (display_flag)
+            if (display_flag && display_wait)
                 break;
             uint16_t opcode = 0x0;
             opcode += ram[pc] << 8;

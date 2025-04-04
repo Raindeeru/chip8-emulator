@@ -2,13 +2,13 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Debug/SDL3.dll"
+			"path" : "RelWithDebInfo/SDL3.dll"
 		},
 		{
-			"path" : "vendored/SDL/Debug/SDL3.lib"
+			"path" : "vendored/SDL/RelWithDebInfo/SDL3.lib"
 		},
 		{
-			"path" : "Debug/SDL3.pdb"
+			"path" : "RelWithDebInfo/SDL3.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -684,7 +684,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd"
+					"fragment" : "/DWIN32 /D_WINDOWS /Zi /O2 /Ob1 /DNDEBUG -MD"
 				},
 				{
 					"backtrace" : 9,
@@ -695,7 +695,7 @@
 					"fragment" : "/W3"
 				},
 				{
-					"fragment" : "/YcC:/dev/chip8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/Debug/cmake_pch.h /FpC:/dev/chip8/build/vendored/SDL/SDL3-shared.dir/Debug/cmake_pch.pch /FIC:/dev/chip8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/Debug/cmake_pch.h"
+					"fragment" : "/YcC:/dev/chip8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/RelWithDebInfo/cmake_pch.h /FpC:/dev/chip8/build/vendored/SDL/SDL3-shared.dir/RelWithDebInfo/cmake_pch.pch /FIC:/dev/chip8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/RelWithDebInfo/cmake_pch.h"
 				}
 			],
 			"defines" : 
@@ -736,7 +736,7 @@
 			[
 				{
 					"backtrace" : 19,
-					"path" : "C:/dev/chip8/build/vendored/SDL/include-config-debug/build_config"
+					"path" : "C:/dev/chip8/build/vendored/SDL/include-config-relwithdebinfo/build_config"
 				},
 				{
 					"backtrace" : 19,
@@ -781,7 +781,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd"
+					"fragment" : "/DWIN32 /D_WINDOWS /Zi /O2 /Ob1 /DNDEBUG -MD"
 				},
 				{
 					"backtrace" : 9,
@@ -792,7 +792,7 @@
 					"fragment" : "/W3"
 				},
 				{
-					"fragment" : "/YuC:/dev/chip8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/Debug/cmake_pch.h /FpC:/dev/chip8/build/vendored/SDL/SDL3-shared.dir/Debug/cmake_pch.pch /FIC:/dev/chip8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/Debug/cmake_pch.h"
+					"fragment" : "/YuC:/dev/chip8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/RelWithDebInfo/cmake_pch.h /FpC:/dev/chip8/build/vendored/SDL/SDL3-shared.dir/RelWithDebInfo/cmake_pch.pch /FIC:/dev/chip8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/RelWithDebInfo/cmake_pch.h"
 				}
 			],
 			"defines" : 
@@ -833,7 +833,7 @@
 			[
 				{
 					"backtrace" : 19,
-					"path" : "C:/dev/chip8/build/vendored/SDL/include-config-debug/build_config"
+					"path" : "C:/dev/chip8/build/vendored/SDL/include-config-relwithdebinfo/build_config"
 				},
 				{
 					"backtrace" : 19,
@@ -1106,7 +1106,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd"
+					"fragment" : "/DWIN32 /D_WINDOWS /Zi /O2 /Ob1 /DNDEBUG -MD"
 				},
 				{
 					"backtrace" : 9,
@@ -1155,7 +1155,7 @@
 			[
 				{
 					"backtrace" : 19,
-					"path" : "C:/dev/chip8/build/vendored/SDL/include-config-debug/build_config"
+					"path" : "C:/dev/chip8/build/vendored/SDL/include-config-relwithdebinfo/build_config"
 				},
 				{
 					"backtrace" : 19,
@@ -1200,7 +1200,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd"
+					"fragment" : "/DWIN32 /D_WINDOWS /Zi /O2 /Ob1 /DNDEBUG -MD"
 				},
 				{
 					"backtrace" : 9,
@@ -1214,7 +1214,7 @@
 					"fragment" : " /GL-"
 				},
 				{
-					"fragment" : "/YuC:/dev/chip8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/Debug/cmake_pch.h /FpC:/dev/chip8/build/vendored/SDL/SDL3-shared.dir/Debug/cmake_pch.pch /FIC:/dev/chip8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/Debug/cmake_pch.h"
+					"fragment" : "/YuC:/dev/chip8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/RelWithDebInfo/cmake_pch.h /FpC:/dev/chip8/build/vendored/SDL/SDL3-shared.dir/RelWithDebInfo/cmake_pch.pch /FIC:/dev/chip8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/RelWithDebInfo/cmake_pch.h"
 				}
 			],
 			"defines" : 
@@ -1255,7 +1255,7 @@
 			[
 				{
 					"backtrace" : 19,
-					"path" : "C:/dev/chip8/build/vendored/SDL/include-config-debug/build_config"
+					"path" : "C:/dev/chip8/build/vendored/SDL/include-config-relwithdebinfo/build_config"
 				},
 				{
 					"backtrace" : 19,
@@ -1300,7 +1300,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-DWIN32 -D_DEBUG"
+					"fragment" : "-DWIN32"
 				}
 			],
 			"defines" : 
@@ -1341,7 +1341,7 @@
 			[
 				{
 					"backtrace" : 19,
-					"path" : "C:/dev/chip8/build/vendored/SDL/include-config-debug/build_config"
+					"path" : "C:/dev/chip8/build/vendored/SDL/include-config-relwithdebinfo/build_config"
 				},
 				{
 					"backtrace" : 19,
@@ -1371,11 +1371,11 @@
 	"dependencies" : 
 	[
 		{
-			"backtrace" : 2,
-			"id" : "SDL_uclibc::@8fb704815aaca498baa2"
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+			"backtrace" : 2,
+			"id" : "SDL_uclibc::@8fb704815aaca498baa2"
 		}
 	],
 	"id" : "SDL3-shared::@8fb704815aaca498baa2",
@@ -1389,7 +1389,7 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "Debug\\SDL_uclibc.lib",
+				"fragment" : "RelWithDebInfo\\SDL_uclibc.lib",
 				"role" : "libraries"
 			},
 			{

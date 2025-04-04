@@ -20,6 +20,7 @@ namespace fs = std::filesystem;
 
 std::string current_rom;
 bool rom_loaded = false;
+json current_settings = nullptr;
 
 void LoadRom(){
     std::string rom_path;
@@ -115,17 +116,51 @@ void LoadRomFromPath(std::string rom_path){
     else std::cout << "Unable to open file";
 }
 
-void ParseSettings(char* argv[]){
-    std::cout << "Hi";
-    fs::path exe_path = fs::path(argv[0]).parent_path();
-    fs::path settings_path = exe_path / "settings.json";
+void ParseSettings(fs::path settings_path){
     std::ifstream f(settings_path);
     if (!f) {
         std::cerr << "Could not open settings.json\n";
         return;
     }
-    std::cout << "Hello";
     json settings = json::parse(f);
-    bool x = settings.contains("Quirks"); 
-    std::cout << settings["Quirks"]["vf_reset"];
+    vf_reset = settings["Quirks"]["vf_reset"];
+    memory = settings["Quirks"]["memory"];
+    display_wait = settings["Quirks"]["display_wait"];
+    clipping = settings["Quirks"]["clipping"];
+    shifting = settings["Quirks"]["shifting"];
+    jumping = settings["Quirks"]["jumping"];
+    current_settings = settings;
+}
+
+void UpdateQuirk(int quirk, fs::path settings_path){
+    std::ofstream f(settings_path);
+    if (!f) {
+        std::cerr << "Could not open settings.json\n";
+        return;
+    }
+    switch (quirk)
+    {
+    case VF_RESET:
+        current_settings["Quirk"]["vf_reset"] = !current_settings["Quirk"]["vf_reset"];
+        break;
+    case MEMORY:
+        current_settings["Quirk"]["memory"] = !current_settings["Quirk"]["memory"];
+        break;
+    case DISPLAY_WAIT: 
+        current_settings["Quirk"]["display_wait"] = !current_settings["Quirk"]["display_wait"];
+        break;
+    case CLIPPING:
+        current_settings["Quirk"]["clipping"] = !current_settings["Quirk"]["clipping"];
+        break;
+    case SHIFTING:
+        current_settings["Quirk"]["shifting"] = !current_settings["Quirk"]["shifting"];
+        break;
+    case JUMPING:
+        current_settings["Quirk"]["jumping"] = !current_settings["Quirk"]["jumping"];
+        break;
+    
+    default:
+        break;
+    }
+    f << current_settings.dump(4);
 }

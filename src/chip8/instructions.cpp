@@ -113,11 +113,23 @@ void SubVXVY(uint16_t X, uint16_t Y) {
 
 // 8XY6
 void ShiftRight(uint16_t X, uint16_t Y) {
-    //original cosmac vip
-    uint8_t original_vy = V[Y];
-    V[X] = V[Y] >> 1;
-    if(0b00000001 & original_vy) V[0xF] = 1;
-    else V[0xF] = 0;
+    if(shifting){
+        uint8_t original_vx = V[X];
+        V[X] = V[X] >> 1;
+        if (0b00000001 & original_vx)
+            V[0xF] = 1;
+        else
+            V[0xF] = 0;
+    }
+    else{
+        // original cosmac vip
+        uint8_t original_vy = V[Y];
+        V[X] = V[Y] >> 1;
+        if (0b00000001 & original_vy)
+            V[0xF] = 1;
+        else
+            V[0xF] = 0;
+    }
 }
 
 // 8XY7
@@ -129,11 +141,23 @@ void SubVYVX(uint16_t X, uint16_t Y) {
 
 // 8XYE
 void ShiftLeft(uint16_t X, uint16_t Y) {
-    //original cosmac vip
-    uint8_t original_vy = V[Y];
-    V[X] = V[Y] << 1;
-    if(0b10000000 & original_vy) V[0xF] = 1;
-    else V[0xF] = 0;
+    if(shifting){
+        uint8_t original_vx = V[X];
+        V[X] = V[X] << 1;
+        if (0b10000000 & original_vx)
+            V[0xF] = 1;
+        else
+            V[0xF] = 0;
+
+    }else{
+        // original cosmac vip
+        uint8_t original_vy = V[Y];
+        V[X] = V[Y] << 1;
+        if (0b10000000 & original_vy)
+            V[0xF] = 1;
+        else
+            V[0xF] = 0;
+    }
 }
 
 // 9XY0
@@ -147,8 +171,11 @@ void JumpNqVXVY(uint16_t X, uint16_t Y) {
 void SetIndexRegister(uint16_t NNN) { I = NNN; }
 
 // BNNN
-void JumpWithOffset(uint16_t NNN) {
-    pc = NNN + V[0x0];
+void JumpWithOffset(uint16_t NNN, uint16_t X) {
+    if(jumping)
+        pc = NNN + V[X];
+    else
+        pc = NNN + V[0x0];
 }
 
 // CXNN
@@ -165,9 +192,13 @@ void DrawSprite(uint16_t X, uint16_t Y, uint16_t N) {
     V[0xF] = 0;
 
     for (int i = 0; i < N; i++) {
+        if(clipping && (N + Y_coord) >= 32)
+            break;
 
         uint8_t sprite_row = ram[I + i];
         for (int b = 0; b < 8; b++) {
+            if(clipping && (b + X_coord) >= 64)
+                break;
             uint8_t current_bit = (sprite_row >> (7 - b)) & 1;
             uint16_t index = ((Y_coord + i)%32) * 64 + ((X_coord + b)%64);
             if (current_bit && display[index])
@@ -290,7 +321,8 @@ void StoreRegisters(uint16_t X) {
     ram[I + i] = V[i];
   }
   //Quirk ?
-  I = I + X + 1;
+  if(memory)
+      I = I + X + 1;
 }
 
 // FX65
@@ -299,7 +331,8 @@ void LoadRegisters(uint16_t X) {
     V[i] = ram[I + i];
   }
   //Quirk ?
-  I = I + X + 1;
+  if(memory)
+      I = I + X + 1;
 }
 
 void DecodeOpcode(uint16_t opcode) {
@@ -378,7 +411,7 @@ void DecodeOpcode(uint16_t opcode) {
             SetIndexRegister(NNN);
             break;
         case 0xb:
-            JumpWithOffset(NNN);
+            JumpWithOffset(NNN, X);
             break;
         case 0xc:
             Random(X, NN);

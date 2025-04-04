@@ -91,14 +91,14 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "ALL_BUILD::@8fb704815aaca498baa2",
-					"jsonFile" : "target-ALL_BUILD-Debug-b796718431d0d6e64a37.json",
+					"jsonFile" : "target-ALL_BUILD-Debug-40506e564ccf1f79cd7a.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "SDL3-shared::@8fb704815aaca498baa2",
-					"jsonFile" : "target-SDL3-shared-Debug-59bcd1705313c19c5161.json",
+					"jsonFile" : "target-SDL3-shared-Debug-78f28b986cead7cd77e7.json",
 					"name" : "SDL3-shared",
 					"projectIndex" : 1
 				},
@@ -126,7 +126,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-main-Debug-e0b5a5881240da15aebb.json",
+					"jsonFile" : "target-main-Debug-3e66c0338e8aeb2e7eb4.json",
 					"name" : "main",
 					"projectIndex" : 0
 				}
@@ -222,14 +222,14 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "ALL_BUILD::@8fb704815aaca498baa2",
-					"jsonFile" : "target-ALL_BUILD-Release-b796718431d0d6e64a37.json",
+					"jsonFile" : "target-ALL_BUILD-Release-40506e564ccf1f79cd7a.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "SDL3-shared::@8fb704815aaca498baa2",
-					"jsonFile" : "target-SDL3-shared-Release-523cfd2f8193f1042621.json",
+					"jsonFile" : "target-SDL3-shared-Release-eb3e73c19d44162a8d16.json",
 					"name" : "SDL3-shared",
 					"projectIndex" : 1
 				},
@@ -257,7 +257,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-main-Release-9f9ab445e7ac72b7b57e.json",
+					"jsonFile" : "target-main-Release-5ffcc0dc21384cfc8808.json",
 					"name" : "main",
 					"projectIndex" : 0
 				}
@@ -353,14 +353,14 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "ALL_BUILD::@8fb704815aaca498baa2",
-					"jsonFile" : "target-ALL_BUILD-MinSizeRel-b796718431d0d6e64a37.json",
+					"jsonFile" : "target-ALL_BUILD-MinSizeRel-40506e564ccf1f79cd7a.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "SDL3-shared::@8fb704815aaca498baa2",
-					"jsonFile" : "target-SDL3-shared-MinSizeRel-4b80327624f01fb520eb.json",
+					"jsonFile" : "target-SDL3-shared-MinSizeRel-23ba84928e7ea4e55366.json",
 					"name" : "SDL3-shared",
 					"projectIndex" : 1
 				},
@@ -388,7 +388,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-main-MinSizeRel-658b0d8c0f2932cb0c18.json",
+					"jsonFile" : "target-main-MinSizeRel-4928523aff8311cee08b.json",
 					"name" : "main",
 					"projectIndex" : 0
 				}
@@ -484,14 +484,14 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "ALL_BUILD::@8fb704815aaca498baa2",
-					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-b796718431d0d6e64a37.json",
+					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-40506e564ccf1f79cd7a.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "SDL3-shared::@8fb704815aaca498baa2",
-					"jsonFile" : "target-SDL3-shared-RelWithDebInfo-c06bb2ddbff1e4960dea.json",
+					"jsonFile" : "target-SDL3-shared-RelWithDebInfo-3384eaafa77f9827dc01.json",
 					"name" : "SDL3-shared",
 					"projectIndex" : 1
 				},
@@ -519,7 +519,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-main-RelWithDebInfo-77713cbf4051c96402c7.json",
+					"jsonFile" : "target-main-RelWithDebInfo-72b2a96f5325f1f8c823.json",
 					"name" : "main",
 					"projectIndex" : 0
 				}

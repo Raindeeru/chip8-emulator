@@ -57,18 +57,55 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 CheckMenuItem(menu, ID_VF_RESET, MF_CHECKED);
             else
                 CheckMenuItem(menu, ID_VF_RESET, MF_UNCHECKED);
+            if (current_rom != "")
+                LoadRomFromPath(current_rom);
+            break;
         case ID_MEMORY:
             UpdateQuirk(MEMORY, settings_path);
             if (current_settings["Quirks"]["memory"])
                 CheckMenuItem(menu, ID_MEMORY, MF_CHECKED);
             else
                 CheckMenuItem(menu, ID_MEMORY, MF_UNCHECKED);
+            if (current_rom != "")
+                LoadRomFromPath(current_rom);
+            break;
         case ID_DISPLAY_WAIT:
             UpdateQuirk(DISPLAY_WAIT, settings_path);
             if (current_settings["Quirks"]["display_wait"])
                 CheckMenuItem(menu, ID_DISPLAY_WAIT, MF_CHECKED);
             else
                 CheckMenuItem(menu, ID_DISPLAY_WAIT, MF_UNCHECKED);
+            if (current_rom != "")
+                LoadRomFromPath(current_rom);
+            break;
+        case ID_CLIPPING:
+            UpdateQuirk(CLIPPING, settings_path);
+            if (current_settings["Quirks"]["clipping"])
+                CheckMenuItem(menu, ID_CLIPPING, MF_CHECKED);
+            else
+                CheckMenuItem(menu, ID_CLIPPING, MF_UNCHECKED);
+            if (current_rom != "")
+                LoadRomFromPath(current_rom);
+            break;
+        case ID_SHIFTING:
+            UpdateQuirk(SHIFTING, settings_path);
+            if (current_settings["Quirks"]["shifting"])
+                CheckMenuItem(menu, ID_SHIFTING, MF_CHECKED);
+            else
+                CheckMenuItem(menu, ID_SHIFTING, MF_UNCHECKED);
+            if (current_rom != "")
+                LoadRomFromPath(current_rom);
+            break;
+        case ID_JUMPING:
+            std::cout << "Hey";
+            UpdateQuirk(JUMPING, settings_path);
+            if (current_settings["Quirks"]["jumping"])
+                CheckMenuItem(menu, ID_JUMPING, MF_CHECKED);
+            else
+                CheckMenuItem(menu, ID_JUMPING, MF_UNCHECKED);
+            if (current_rom != "")
+                LoadRomFromPath(current_rom);
+            break;
 
         default:
             break;
@@ -85,6 +122,7 @@ int main(int argc, char *argv[])
     fs::path exe_path = fs::path(argv[0]).parent_path();
     settings_path = exe_path / "settings.json";
     ParseSettings(settings_path);
+    std::cout << "hey";
     MSG msg = {};
 
 

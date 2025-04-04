@@ -18,7 +18,7 @@
 using json = nlohmann::json;
 namespace fs = std::filesystem;
 
-std::string current_rom;
+std::string current_rom = "";
 bool rom_loaded = false;
 json current_settings = nullptr;
 
@@ -89,6 +89,7 @@ void LoadRom(){
 }
 
 void LoadRomFromPath(std::string rom_path){
+    current_rom = rom_path;
     char * memblock;
     std::streampos size;
 
@@ -141,26 +142,33 @@ void UpdateQuirk(int quirk, fs::path settings_path){
     switch (quirk)
     {
     case VF_RESET:
-        current_settings["Quirk"]["vf_reset"] = !current_settings["Quirk"]["vf_reset"];
+        current_settings["Quirks"]["vf_reset"] = !current_settings["Quirks"]["vf_reset"];
         break;
     case MEMORY:
-        current_settings["Quirk"]["memory"] = !current_settings["Quirk"]["memory"];
+        current_settings["Quirks"]["memory"] = !current_settings["Quirks"]["memory"];
         break;
     case DISPLAY_WAIT: 
-        current_settings["Quirk"]["display_wait"] = !current_settings["Quirk"]["display_wait"];
+        current_settings["Quirks"]["display_wait"] = !current_settings["Quirks"]["display_wait"];
         break;
     case CLIPPING:
-        current_settings["Quirk"]["clipping"] = !current_settings["Quirk"]["clipping"];
+        current_settings["Quirks"]["clipping"] = !current_settings["Quirks"]["clipping"];
         break;
     case SHIFTING:
-        current_settings["Quirk"]["shifting"] = !current_settings["Quirk"]["shifting"];
+        current_settings["Quirks"]["shifting"] = !current_settings["Quirks"]["shifting"];
         break;
     case JUMPING:
-        current_settings["Quirk"]["jumping"] = !current_settings["Quirk"]["jumping"];
+        current_settings["Quirks"]["jumping"] = !current_settings["Quirks"]["jumping"];
         break;
     
     default:
         break;
     }
     f << current_settings.dump(4);
+    f.close();
+    vf_reset = current_settings["Quirks"]["vf_reset"];
+    memory = current_settings["Quirks"]["memory"];
+    display_wait = current_settings["Quirks"]["display_wait"];
+    clipping = current_settings["Quirks"]["clipping"];
+    shifting = current_settings["Quirks"]["shifting"];
+    jumping = current_settings["Quirks"]["jumping"];
 }

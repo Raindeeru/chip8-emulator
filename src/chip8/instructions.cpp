@@ -134,8 +134,9 @@ void ShiftRight(uint16_t X, uint16_t Y) {
 
 // 8XY7
 void SubVYVX(uint16_t X, uint16_t Y) {
+    uint8_t original_vx = V[X];
     V[X] = V[Y] - V[X];
-    if (V[Y] >= V[X]) V[0xF] = 1;
+    if (V[Y] >= original_vx) V[0xF] = 1;
     else V[0xF] = 0;
 }
 
@@ -180,8 +181,7 @@ void JumpWithOffset(uint16_t NNN, uint16_t X) {
 
 // CXNN
 void Random(uint16_t X, uint16_t NN) {
-    uint8_t random = rand() % 255;
-    V[X] = random & (uint8_t)NN;
+    V[X] = rand() & (uint8_t)NN;
 }
 
 // DXYN
@@ -210,16 +210,14 @@ void DrawSprite(uint16_t X, uint16_t Y, uint16_t N) {
 
 // EX9E
 void JumpIfPress(uint16_t X) {
-    if (V[X] > 0xF) return;
-    if(keymap[V[X]] == 1){
+    if(keymap[V[X] & N_MASK] == 1){
         pc += 2;
     }
 }
 
 // EXA1
 void JumpIfNotPress(uint16_t X) {
-    if (V[X] > 0xF) return;
-    if(keymap[V[X]] == 0){
+    if(keymap[V[X] & N_MASK] == 0){
         pc += 2;
     }
 }
@@ -231,55 +229,15 @@ void GetDelay(uint16_t X) {
 
 // FX0A
 void GetKey(uint16_t X) {
-    if(keymap[0x0]){
-        V[X] = 0x0;
-    }
-    else if(keymap[0x1]){
-        V[X] = 0x1;
-    }
-    else if(keymap[0x2]){
-        V[X] = 0x2;
-    }
-    else if(keymap[0x3]){
-        V[X] = 0x3;
-    }
-    else if(keymap[0x4]){
-        V[X] = 0x4;
-    }
-    else if(keymap[0x5]){
-        V[X] = 0x5;
-    }
-    else if(keymap[0x6]){
-        V[X] = 0x6;
-    }
-    else if(keymap[0x7]){
-        V[X] = 0x7;
-    }
-    else if(keymap[0x8]){
-        V[X] = 0x8;
-    }
-    else if(keymap[0x9]){
-        V[X] = 0x9;
-    }
-    else if(keymap[0xa]){
-        V[X] = 0xa;
-    }
-    else if(keymap[0xb]){
-        V[X] = 0xb;
-    }
-    else if(keymap[0xc]){
-        V[X] = 0xc;
-    }
-    else if(keymap[0xd]){
-        V[X] = 0xd;
-    }
-    else if(keymap[0xe]){
-        V[X] = 0xe;
-    }
-    else if(keymap[0xf]){
-        V[X] = 0xf;
-    }else{
-        pc -= 2;
+
+    for (int i = 0; i < 0xF; i++)
+    {
+        if(!keymap[i] && keystate[i]){
+            V[X] = i;
+            break;
+        }else{
+            pc -=2;   
+        }
     }
 }
 
@@ -295,7 +253,6 @@ void SetSound(uint16_t X) {
 
 // FX1E
 void AddIndex(uint16_t X) {
-    if(I + V[X] >=  4096) V[0xf] = 1;
     I += V[X];
 }
 
@@ -461,7 +418,6 @@ void DecodeOpcode(uint16_t opcode) {
             }
             break;
         default:
-            std::cout << "Unknown opcode encountered " << std::hex << opcode << "\n"; 
             break;
     }
 }

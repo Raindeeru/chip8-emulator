@@ -12,6 +12,7 @@ std::int8_t sp;
 
 std::uint8_t display[64 * 32] = {0};
 std::uint8_t keymap[16] = {0};
+std::uint8_t keystate[16] = {0};
 
 std::uint8_t delay;
 std::uint8_t sound;
@@ -35,6 +36,7 @@ void Chip8_Init() {
     memset(stack, 0, sizeof(stack));
     memset(display, 0, sizeof(display));
     memset(keymap, 0, sizeof(keymap));
+    memset(keystate, 0, sizeof(keystate));
     pc = 0x200;
     display_flag = 0;
     I = 0x0;

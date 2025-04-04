@@ -255,11 +255,10 @@ int main(int argc, char *argv[])
             opcode += ram[pc + 1];
 
             pc += 2;
-            if (pc > 0x1000)
-                pc = 0x200;
-            // decode execute
             DecodeOpcode(opcode);
         }
+
+        memcpy(keystate, keymap, sizeof(keymap));
 
         // render stufff here
         display_flag = 0;

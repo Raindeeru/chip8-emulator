@@ -12,6 +12,7 @@ extern std::int8_t sp;
 
 extern std::uint8_t display[64 * 32];
 extern std::uint8_t keymap[16];
+extern std::uint8_t keystate[16];
 
 extern std::uint8_t delay;
 extern std::uint8_t sound;

@@ -229,7 +229,6 @@ void GetDelay(uint16_t X) {
 
 // FX0A
 void GetKey(uint16_t X) {
-
     for (int i = 0; i < 0xF; i++)
     {
         if(!keymap[i] && keystate[i]){

@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "RelWithDebInfo/main.exe"
+			"path" : "Debug/main.exe"
 		},
 		{
-			"path" : "RelWithDebInfo/main.pdb"
+			"path" : "Debug/main.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -45,7 +45,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /O2 /Ob1 /DNDEBUG -std:c++17 -MD"
+					"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd"
 				}
 			],
 			"includes" : 
@@ -82,7 +82,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-DWIN32"
+					"fragment" : "-DWIN32 -D_DEBUG"
 				}
 			],
 			"includes" : 
@@ -106,11 +106,11 @@
 	"dependencies" : 
 	[
 		{
-			"backtrace" : 2,
-			"id" : "SDL3-shared::@8fb704815aaca498baa2"
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+			"backtrace" : 2,
+			"id" : "SDL3-shared::@8fb704815aaca498baa2"
 		}
 	],
 	"id" : "main::@6890427a1f51a3e7e1df",
@@ -119,7 +119,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /O2 /Ob1 /DNDEBUG -MD",
+				"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd",
 				"role" : "flags"
 			},
 			{
@@ -132,7 +132,7 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "vendored\\SDL\\RelWithDebInfo\\SDL3.lib",
+				"fragment" : "vendored\\SDL\\Debug\\SDL3.lib",
 				"role" : "libraries"
 			},
 			{

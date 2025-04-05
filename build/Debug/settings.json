@@ -1,13 +1,11 @@
 {
-    "Quirks":{
-        "vf_reset": true,
-        "memory": true,
-        "display_wait": true,
+    "Quirks": {
         "clipping": false,
+        "display_wait": true,
+        "jumping": false,
+        "memory": true,
         "shifting": false,
-        "jumping": false
+        "vf_reset": true
     },
-    "RecentFiles":[
-
-    ]
+    "RecentFiles": []
 }

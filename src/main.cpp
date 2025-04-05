@@ -35,6 +35,9 @@ namespace fs = std::filesystem;
 #define FPS 60
 #define IPF 11
 
+#define LIGHT 0xFFd7bcad
+#define DARK 0xFF452f47
+
 bool running = false;
 WNDPROC SDLWndProc = nullptr;
 fs::path settings_path;
@@ -291,7 +294,7 @@ int main(int argc, char *argv[])
 
         for (int i = 0; i < 64 * 32; i++)
         {
-            pixel_display[i] = display[i] > 0 ? 0xFFFFFFFF : 0x00000000;
+            pixel_display[i] = display[i] > 0 ? LIGHT: DARK;
         }
         if (SDL_LockTexture(tex, NULL, &rawPixels, &pitch) == false)
         {
@@ -302,7 +305,7 @@ int main(int argc, char *argv[])
         memcpy((uint8_t *)rawPixels, pixel_display, sizeof(uint32_t) * 64 * 32);
         SDL_UnlockTexture(tex);
 
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
         SDL_RenderTexture(renderer, tex, NULL, &screen);
 

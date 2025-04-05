@@ -252,7 +252,7 @@ void SetSound(uint16_t X) {
 // FX1E
 void AddIndex(uint16_t X) {
     I += V[X];
-    I %= 1000;
+    I %= 0x1000;
 }
 
 // FX29

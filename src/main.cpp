@@ -122,14 +122,16 @@ int main(int argc, char *argv[])
     fs::path exe_path = fs::path(argv[0]).parent_path();
     settings_path = exe_path / "settings.json";
     ParseSettings(settings_path);
-    std::cout << "hey";
     MSG msg = {};
 
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Init(SDL_INIT_EVENTS);
 
-    SDL_Window *win = SDL_CreateWindow("Chip-8", 64 * PIXEL_SCALE, 32 * PIXEL_SCALE, SDL_WINDOW_OPENGL);
+    int menu_height = GetSystemMetrics(SM_CYMENU);
+
+    SDL_Window *win = SDL_CreateWindow("Chip-8", 64 * PIXEL_SCALE, menu_height + (32 * PIXEL_SCALE), SDL_WINDOW_OPENGL);
+    SDL_SetWindowResizable(win, true);
     
     //For Menu Stuff
     HWND hwnd = (HWND)SDL_GetPointerProperty(SDL_GetWindowProperties(win), SDL_PROP_WINDOW_WIN32_HWND_POINTER, NULL);
@@ -182,6 +184,8 @@ int main(int argc, char *argv[])
         32);
     SDL_SetTextureScaleMode(tex, SDL_SCALEMODE_NEAREST);
 
+    SDL_FRect screen = {0,0, 64*PIXEL_SCALE, 32*PIXEL_SCALE};
+
     if (!win)
     {
         std::cout << "Failed to create window! Error: " << SDL_GetError() << "\n";
@@ -215,6 +219,26 @@ int main(int argc, char *argv[])
             case SDL_EVENT_QUIT:
                 running = false;
                 break;
+            case SDL_EVENT_WINDOW_RESIZED:
+                int height;
+                int width;
+                SDL_GetWindowSize(win, &width, &height);
+                if((float)width/height > 2){
+                    //screen is wide
+                    screen.h = height;
+                    screen.w = screen.h * 2;
+
+                    screen.y = 0;
+                    screen.x = (width - screen.w)/2;
+
+                }else{
+                    //screen is tall
+                    screen.w = width;
+                    screen.h = screen.w/2;
+
+                    screen.x = 0;
+                    screen.y = (height- screen.h)/2;
+                }
             default:
                 break;
             }
@@ -278,9 +302,9 @@ int main(int argc, char *argv[])
         memcpy((uint8_t *)rawPixels, pixel_display, sizeof(uint32_t) * 64 * 32);
         SDL_UnlockTexture(tex);
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         SDL_RenderClear(renderer);
-        SDL_RenderTexture(renderer, tex, NULL, NULL);
+        SDL_RenderTexture(renderer, tex, NULL, &screen);
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 

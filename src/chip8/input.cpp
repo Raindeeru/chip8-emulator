@@ -91,7 +91,7 @@ void UpdateKeymap(){
        keymap[0xF] = 0;
    }
 
-   std::cout << "|-|-|-|-|\n"
+   /*std::cout << "|-|-|-|-|\n"
        << "|"
        << (int)keymap[0x1] << "|"
        << (int)keymap[0x2] << "|"
@@ -112,6 +112,6 @@ void UpdateKeymap(){
        << (int)keymap[0x0] << "|"
        << (int)keymap[0xB] << "|"
        << (int)keymap[0xF] << "|\n";
-   std::cout << "\033[5F";
+   std::cout << "\033[5F";*/
 
 }

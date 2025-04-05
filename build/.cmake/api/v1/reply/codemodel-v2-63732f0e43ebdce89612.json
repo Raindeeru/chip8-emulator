@@ -91,14 +91,14 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "ALL_BUILD::@8fb704815aaca498baa2",
-					"jsonFile" : "target-ALL_BUILD-Debug-40506e564ccf1f79cd7a.json",
+					"jsonFile" : "target-ALL_BUILD-Debug-6b69fe817224e1f5e1f2.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "SDL3-shared::@8fb704815aaca498baa2",
-					"jsonFile" : "target-SDL3-shared-Debug-78f28b986cead7cd77e7.json",
+					"jsonFile" : "target-SDL3-shared-Debug-59bcd1705313c19c5161.json",
 					"name" : "SDL3-shared",
 					"projectIndex" : 1
 				},
@@ -222,14 +222,14 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "ALL_BUILD::@8fb704815aaca498baa2",
-					"jsonFile" : "target-ALL_BUILD-Release-40506e564ccf1f79cd7a.json",
+					"jsonFile" : "target-ALL_BUILD-Release-6b69fe817224e1f5e1f2.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "SDL3-shared::@8fb704815aaca498baa2",
-					"jsonFile" : "target-SDL3-shared-Release-eb3e73c19d44162a8d16.json",
+					"jsonFile" : "target-SDL3-shared-Release-523cfd2f8193f1042621.json",
 					"name" : "SDL3-shared",
 					"projectIndex" : 1
 				},
@@ -353,14 +353,14 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "ALL_BUILD::@8fb704815aaca498baa2",
-					"jsonFile" : "target-ALL_BUILD-MinSizeRel-40506e564ccf1f79cd7a.json",
+					"jsonFile" : "target-ALL_BUILD-MinSizeRel-6b69fe817224e1f5e1f2.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "SDL3-shared::@8fb704815aaca498baa2",
-					"jsonFile" : "target-SDL3-shared-MinSizeRel-23ba84928e7ea4e55366.json",
+					"jsonFile" : "target-SDL3-shared-MinSizeRel-4b80327624f01fb520eb.json",
 					"name" : "SDL3-shared",
 					"projectIndex" : 1
 				},
@@ -484,14 +484,14 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "ALL_BUILD::@8fb704815aaca498baa2",
-					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-40506e564ccf1f79cd7a.json",
+					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-6b69fe817224e1f5e1f2.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "SDL3-shared::@8fb704815aaca498baa2",
-					"jsonFile" : "target-SDL3-shared-RelWithDebInfo-3384eaafa77f9827dc01.json",
+					"jsonFile" : "target-SDL3-shared-RelWithDebInfo-c06bb2ddbff1e4960dea.json",
 					"name" : "SDL3-shared",
 					"projectIndex" : 1
 				},

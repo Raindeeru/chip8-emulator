@@ -233,11 +233,10 @@ void GetKey(uint16_t X) {
     {
         if(!keymap[i] && keystate[i]){
             V[X] = i;
-            break;
-        }else{
-            pc -=2;   
+            return;
         }
     }
+    pc -= 2;
 }
 
 // FX15
@@ -253,12 +252,14 @@ void SetSound(uint16_t X) {
 // FX1E
 void AddIndex(uint16_t X) {
     I += V[X];
+    I %= 1000;
 }
 
 // FX29
 void SetIndexLoc(uint16_t X) {
   uint8_t character = V[X] & 0x0F;
   I = 0x50 + character * 5;
+  I %= 0x1000;
 }
 
 // FX33
@@ -266,9 +267,9 @@ void GetBCD(uint16_t X) {
   uint8_t hundreds = V[X] / 100;
   uint8_t tens = (V[X] % 100) / 10;
   uint8_t ones = V[X] % 10;
-  V[I] = hundreds;
-  V[I + 1] = tens;
-  V[I + 2] = ones;
+  ram[I] = hundreds;
+  ram[I + 1] = tens;
+  ram[I + 2] = ones;
 }
 
 // FX55
@@ -277,8 +278,11 @@ void StoreRegisters(uint16_t X) {
     ram[I + i] = V[i];
   }
   //Quirk ?
-  if(memory)
+  if (memory)
+  {
       I = I + X + 1;
+      I %= 0x1000;
+  }
 }
 
 // FX65
@@ -287,8 +291,10 @@ void LoadRegisters(uint16_t X) {
     V[i] = ram[I + i];
   }
   //Quirk ?
-  if(memory)
+  if(memory){
       I = I + X + 1;
+      I %= 0x1000;
+  }
 }
 
 void DecodeOpcode(uint16_t opcode) {
@@ -305,6 +311,9 @@ void DecodeOpcode(uint16_t opcode) {
                 ClearDisplay();
             else if (NNN == 0x0EE)
                 ReturnSubroutine();
+            else{
+                std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+            }
             break;
         case 0x1:
             Jump(NNN);
@@ -319,7 +328,8 @@ void DecodeOpcode(uint16_t opcode) {
             JumpNqVXNN(X, NN);
             break;
         case 0x5:
-            JumpEqVXVY(X, Y);
+            if(N==0) JumpEqVXVY(X, Y);
+            else std::cout << "Invalid Instruction: " << std::hex << opcode;
             break;
         case 0x6:
             SetVXNN(X, NN);
@@ -357,11 +367,13 @@ void DecodeOpcode(uint16_t opcode) {
                     ShiftLeft(X, Y);
                     break;
                 default:
+                    std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
                     break;
             }
             break;
         case 0x9:
             if(N == 0) JumpNqVXVY(X, Y);
+            else std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
             break;
         case 0xa:
             SetIndexRegister(NNN);
@@ -382,6 +394,9 @@ void DecodeOpcode(uint16_t opcode) {
                     break;
                 case 0xA1:
                     JumpIfNotPress(X);
+                    break;
+                default:
+                    std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
                     break;
             }
             break;
@@ -414,6 +429,8 @@ void DecodeOpcode(uint16_t opcode) {
                 case 0x65:
                     LoadRegisters(X);
                     break;
+                default:
+                    std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
             }
             break;
         default:

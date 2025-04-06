@@ -128,8 +128,22 @@ int main(int argc, char *argv[])
     MSG msg = {};
 
 
-    SDL_Init(SDL_INIT_VIDEO);
-    SDL_Init(SDL_INIT_EVENTS);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+
+    //testing the audio
+    SDL_AudioSpec spec = {SDL_AUDIO_S16, 22050};
+
+    spec.channels = 1;
+    spec.format = SDL_AUDIO_F32;
+    spec.freq = 8000;
+    SDL_AudioStream *stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec, NULL, NULL);
+    if (!stream) {
+        SDL_Log("Couldn't create audio stream: %s", SDL_GetError());
+        return SDL_APP_FAILURE;
+    }
+
+    /* SDL_OpenAudioDeviceStream starts the device paused. You have to tell it to start! */
+    SDL_ResumeAudioStreamDevice(stream);
 
     int menu_height = GetSystemMetrics(SM_CYMENU);
 
@@ -204,6 +218,7 @@ int main(int argc, char *argv[])
     DecodeOpcode((uint16_t)0xABCD);
 
     int count = 0;
+    int current_sine_sample = 0;
 
     while (running)
     {
@@ -249,6 +264,9 @@ int main(int argc, char *argv[])
 
         if(!rom_loaded) continue;
 
+        //////
+
+
         // time control
         uint32_t currentTime = SDL_GetTicks();
         deltaTime = currentTime - lastUpdateTime;
@@ -267,8 +285,24 @@ int main(int argc, char *argv[])
         // Delay and Sound
         if (delay > 0)
             delay--;
-        if (sound > 0)
+        if (sound > 0){
+            const int samples_per_frame = 8000/60; 
+            float samples[samples_per_frame];
+            for (int i = 0; i < SDL_arraysize(samples); i++)
+            {
+                const int freq = 440;
+                const float phase = current_sine_sample * freq / 8000.0f;
+                samples[i] = 4* floorf(phase) - 2 * floorf(2*phase) + 1;
+                current_sine_sample++;
+            }
+
+            /* wrapping around to avoid floating-point errors */
+            current_sine_sample %= 8000;
+
+            /* feed the new data to the stream. It will queue at the end, and trickle out as the hardware needs more data. */
+            SDL_PutAudioStreamData(stream, samples, sizeof(samples));
             sound--;
+        }
 
         // fetch decode execute logic here
         // fetch

@@ -297,7 +297,185 @@ void LoadRegisters(uint16_t X) {
   }
 }
 
+//SuperChip Specific Instruction
+
+//Change to use hi res display
+void DrawSpriteSuperChip(uint16_t X, uint16_t Y, uint16_t N) {
+    display_flag = 1;
+    uint8_t X_coord = V[X] % 64;
+    uint8_t Y_coord = V[Y] % 32;
+    V[0xF] = 0;
+
+    for (int i = 0; i < N; i++) {
+        if(clipping && (N + Y_coord) >= 32)
+            break;
+
+        uint8_t sprite_row = ram[I + i];
+        for (int b = 0; b < 8; b++) {
+            if(clipping && (b + X_coord) >= 64)
+                break;
+            uint8_t current_bit = (sprite_row >> (7 - b)) & 1;
+            uint16_t index = ((Y_coord + i)%32) * 64 + ((X_coord + b)%64);
+            if (current_bit && display[index])
+                V[0xF] = 0x1;
+            display[index] ^= current_bit;
+        }
+    }
+}
+
+//00CN
+//00FB
+//00FC
+//FX30
+
+//DXYO
+//FX75
+//FX85
+
+
+
 void DecodeOpcode(uint16_t opcode) {
+    uint16_t op_type = opcode >> (3 * NIBBLE);
+    uint16_t X = (opcode & X_MASK) >> 2 * NIBBLE;
+    uint16_t Y = (opcode & Y_MASK) >> NIBBLE;
+    uint16_t N = opcode & N_MASK;
+    uint16_t NN = opcode & NN_MASK;
+    uint16_t NNN = opcode & NNN_MASK;
+
+    switch (op_type) {
+        case 0x0:
+            if (NNN == 0x0E0)
+                ClearDisplay();
+            else if (NNN == 0x0EE)
+                ReturnSubroutine();
+            else{
+                std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+            }
+            break;
+        case 0x1:
+            Jump(NNN);
+            break;
+        case 0x2:
+            CallSubroutine(NNN);
+            break;
+        case 0x3:
+            JumpEqVXNN(X, NN);
+            break;
+        case 0x4:
+            JumpNqVXNN(X, NN);
+            break;
+        case 0x5:
+            if(N==0) JumpEqVXVY(X, Y);
+            else std::cout << "Invalid Instruction: " << std::hex << opcode;
+            break;
+        case 0x6:
+            SetVXNN(X, NN);
+            break;
+        case 0x7:
+            AddVXNN(X, NN);
+            break;
+        case 0x8:
+            switch (N) {
+                case 0x0:
+                    SetVXVY(X, Y);
+                    break;
+                case 0x1:
+                    Or(X, Y);
+                    break;
+                case 0x2:
+                    And(X, Y);
+                    break;
+                case 0x3:
+                    Xor(X, Y);
+                    break;
+                case 0x4:
+                    AddVXVY(X, Y);
+                    break;
+                case 0x5:
+                    SubVXVY(X, Y);
+                    break;
+                case 0x6:
+                    ShiftRight(X, Y);
+                    break;
+                case 0x7:
+                    SubVYVX(X, Y);
+                    break;
+                case 0xE:
+                    ShiftLeft(X, Y);
+                    break;
+                default:
+                    std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+                    break;
+            }
+            break;
+        case 0x9:
+            if(N == 0) JumpNqVXVY(X, Y);
+            else std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+            break;
+        case 0xa:
+            SetIndexRegister(NNN);
+            break;
+        case 0xb:
+            JumpWithOffset(NNN, X);
+            break;
+        case 0xc:
+            Random(X, NN);
+            break;
+        case 0xd:
+            DrawSprite(X, Y, N);
+            break;
+        case 0xe:
+            switch (NN) {
+                case 0x9E:
+                    JumpIfPress(X);
+                    break;
+                case 0xA1:
+                    JumpIfNotPress(X);
+                    break;
+                default:
+                    std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+                    break;
+            }
+            break;
+        case 0xf:
+            switch (NN) {
+                case 0x07:
+                    GetDelay(X);
+                    break;
+                case 0x0A:
+                    GetKey(X);
+                    break;
+                case 0x15:
+                    SetDelay(X);
+                    break;
+                case 0x18:
+                    SetSound(X);
+                    break;
+                case 0x1E:
+                    AddIndex(X);
+                    break;
+                case 0x29:
+                    SetIndexLoc(X);
+                    break;
+                case 0x33:
+                    GetBCD(X);
+                    break;
+                case 0x55:
+                    StoreRegisters(X);
+                    break;
+                case 0x65:
+                    LoadRegisters(X);
+                    break;
+                default:
+                    std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+void DecodeOpcodeSuperChip(uint16_t opcode) {
     uint16_t op_type = opcode >> (3 * NIBBLE);
     uint16_t X = (opcode & X_MASK) >> 2 * NIBBLE;
     uint16_t Y = (opcode & Y_MASK) >> NIBBLE;

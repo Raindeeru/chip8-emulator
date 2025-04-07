@@ -264,7 +264,6 @@ int main(int argc, char *argv[])
 
         if(!rom_loaded) continue;
 
-        //////
 
 
         // time control
@@ -282,12 +281,14 @@ int main(int argc, char *argv[])
 
         // Input
         UpdateKeymap();
+
         // Delay and Sound
         if (delay > 0)
             delay--;
-        if (sound > 0){
+        if (sound > 0 || (key_held && sound_on_press)){
             const int samples_per_frame = 8000/60; 
             float samples[samples_per_frame];
+            //I just got this code straight from the example that SDL gave but replaced the sin wave with a square wave
             for (int i = 0; i < SDL_arraysize(samples); i++)
             {
                 const int freq = 440;
@@ -295,13 +296,13 @@ int main(int argc, char *argv[])
                 samples[i] = 4* floorf(phase) - 2 * floorf(2*phase) + 1;
                 current_sine_sample++;
             }
-
-            /* wrapping around to avoid floating-point errors */
             current_sine_sample %= 8000;
 
-            /* feed the new data to the stream. It will queue at the end, and trickle out as the hardware needs more data. */
             SDL_PutAudioStreamData(stream, samples, sizeof(samples));
-            sound--;
+            if(sound > 0)
+                sound--;
+        }else{
+            SDL_ClearAudioStream(stream);
         }
 
         // fetch decode execute logic here

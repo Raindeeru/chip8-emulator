@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Release/main.exe"
+			"path" : "RelWithDebInfo/main.exe"
 		},
 		{
-			"path" : "Release/main.pdb"
+			"path" : "RelWithDebInfo/main.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -45,7 +45,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD"
+					"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /O2 /Ob1 /DNDEBUG -std:c++17 -MD"
 				}
 			],
 			"includes" : 
@@ -106,11 +106,11 @@
 	"dependencies" : 
 	[
 		{
-			"backtrace" : 2,
-			"id" : "SDL3-shared::@8fb704815aaca498baa2"
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+			"backtrace" : 2,
+			"id" : "SDL3-shared::@8fb704815aaca498baa2"
 		}
 	],
 	"id" : "main::@6890427a1f51a3e7e1df",
@@ -119,11 +119,11 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /O2 /Ob2 /DNDEBUG -MD",
+				"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /O2 /Ob1 /DNDEBUG -MD",
 				"role" : "flags"
 			},
 			{
-				"fragment" : "/machine:x64 /INCREMENTAL:NO",
+				"fragment" : "/machine:x64 /debug /INCREMENTAL",
 				"role" : "flags"
 			},
 			{
@@ -132,7 +132,7 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "vendored\\SDL\\Release\\SDL3.lib",
+				"fragment" : "vendored\\SDL\\RelWithDebInfo\\SDL3.lib",
 				"role" : "libraries"
 			},
 			{

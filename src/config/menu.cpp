@@ -131,6 +131,12 @@ void ParseSettings(fs::path settings_path){
     shifting = settings["Quirks"]["shifting"];
     jumping = settings["Quirks"]["jumping"];
     current_settings = settings;
+
+    for (int i = 0; i < 8; i++)
+    {
+        flags[i] = settings["Flags"][i];
+    }
+    
 }
 
 void UpdateQuirk(int quirk, fs::path settings_path){

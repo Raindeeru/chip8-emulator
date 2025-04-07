@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <iostream>
 
+bool key_held = false;
+
 void UpdateKeymap(){
    const bool* currentKeyStates = SDL_GetKeyboardState(NULL);
 
@@ -89,6 +91,14 @@ void UpdateKeymap(){
        keymap[0xF] = 1;  
    }else{
        keymap[0xF] = 0;
+   }
+
+   for(int i = 0; i <= 0xF; i++){
+    if(keymap[i]){
+        key_held = true;
+        return;
+    }
+    key_held = false;
    }
 
    /*std::cout << "|-|-|-|-|\n"

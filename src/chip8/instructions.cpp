@@ -302,37 +302,110 @@ void LoadRegisters(uint16_t X) {
 //Change to use hi res display
 void DrawSpriteSuperChip(uint16_t X, uint16_t Y, uint16_t N) {
     display_flag = 1;
-    uint8_t X_coord = V[X] % 64;
-    uint8_t Y_coord = V[Y] % 32;
+    uint8_t X_coord = hires ? V[X] % 128 : V[X] % 64;
+    uint8_t Y_coord = hires ? V[Y] % 64 : V[Y] % 32;
     V[0xF] = 0;
 
-    for (int i = 0; i < N; i++) {
-        if(clipping && (N + Y_coord) >= 32)
-            break;
-
-        uint8_t sprite_row = ram[I + i];
-        for (int b = 0; b < 8; b++) {
-            if(clipping && (b + X_coord) >= 64)
+    if(hires){
+        for (int i = 0; i < N; i++)
+        {
+            if (clipping && (N + Y_coord) >= 64)
                 break;
-            uint8_t current_bit = (sprite_row >> (7 - b)) & 1;
-            uint16_t index = ((Y_coord + i)%32) * 64 + ((X_coord + b)%64);
-            if (current_bit && display[index])
-                V[0xF] = 0x1;
-            display[index] ^= current_bit;
+
+            uint8_t sprite_row = ram[I + i];
+            for (int b = 0; b < 8; b++)
+            {
+                if (clipping && (b + X_coord) >= 128)
+                    break;
+                uint8_t current_bit = (sprite_row >> (7 - b)) & 1;
+                uint16_t index = ((Y_coord + i) % 64) * 128 + ((X_coord + b) % 128);
+                if (current_bit && display[index])
+                    V[0xF] = 0x1;
+                display[index] ^= current_bit;
+            }
+        }
+    }else{
+        for (int i = 0; i < N; i++)
+        {
+            if (clipping && (N + Y_coord) >= 32)
+                break;
+
+            uint8_t sprite_row = ram[I + i];
+            for (int b = 0; b < 8; b++)
+            {
+                if (clipping && (b + X_coord) >= 64)
+                    break;
+
+                //For the large pixels in lores mode we got 4 pixels in 1
+                uint8_t current_bit = (sprite_row >> (7 - b)) & 1;
+
+                uint16_t indices[4] = {0};
+                indices[0] = (2*(Y_coord + i) % 64) * 128 + (2*(X_coord + b) % 128);
+                indices[1] = (2*(Y_coord + i) % 64) * 128 + (2*(X_coord + b) % 128) + 1;
+                indices[2] = (2*(Y_coord + i) % 64) * 128 + (2*(X_coord + b) % 128) + 128;
+                indices[3] = (2*(Y_coord + i) % 64) * 128 + (2*(X_coord + b) % 128) + 129;
+
+                for (int j = 0; j < 4; j++ )
+                {
+                    if (current_bit && display[indices[j]])
+                        V[0xF] = 0x1;
+                    display[indices[j]] ^= current_bit;
+                }                
+            }
         }
     }
+    
+}
+
+//00FF
+void HiResOn(){
+    hires = true;
+}
+
+//00FE
+void HiResOff(){
+    hires = false;
 }
 
 //00CN
+void ScrollDown(uint16_t N){
+
+}
+
 //00FB
+void ScrollRight(){
+
+}
+
 //00FC
+void ScrollLeft(){
+
+}
+
+//DXY0 16x16 sprite
+void DrawBigSprite(uint16_t X, uint16_t Y){
+
+}
+
 //FX30
+void SetIndexLocBig(uint16_t X){
 
-//DXYO
+}
+
 //FX75
+void SaveFlags(uint16_t X){
+
+}
+
 //FX85
+void LoadFlags(uint16_t X){
 
+}
 
+//00FD
+void Exit(){
+
+}
 
 void DecodeOpcode(uint16_t opcode) {
     uint16_t op_type = opcode >> (3 * NIBBLE);
@@ -485,12 +558,36 @@ void DecodeOpcodeSuperChip(uint16_t opcode) {
 
     switch (op_type) {
         case 0x0:
-            if (NNN == 0x0E0)
+            switch (NNN)
+            {
+            case 0x0E0:
                 ClearDisplay();
-            else if (NNN == 0x0EE)
+                break;
+            case 0x0EE:
                 ReturnSubroutine();
-            else{
-                std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+                break;
+            case 0x0FF:
+                HiResOn();
+                break;
+            case 0x0FE:
+                HiResOff();
+                break;
+            case 0x0FB:
+                ScrollRight();
+                break;
+            case 0x0FC:
+                ScrollLeft();
+                break;
+            case 0x0FD:
+                Exit();
+                break;
+            default:
+                if((NNN & 0xFF0) == 0x0C0){
+                    ScrollDown(N);
+                }else{
+                    std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+                }
+                break;
             }
             break;
         case 0x1:
@@ -563,7 +660,10 @@ void DecodeOpcodeSuperChip(uint16_t opcode) {
             Random(X, NN);
             break;
         case 0xd:
-            DrawSprite(X, Y, N);
+            if(N == 0)
+                DrawBigSprite(X, Y);
+            else
+                DrawSpriteSuperChip(X, Y, N);
             break;
         case 0xe:
             switch (NN) {
@@ -606,6 +706,15 @@ void DecodeOpcodeSuperChip(uint16_t opcode) {
                     break;
                 case 0x65:
                     LoadRegisters(X);
+                    break;
+                case 0x30:
+                    SetIndexLocBig(X);
+                    break;
+                case 0x75:
+                    SaveFlags(X);
+                    break;
+                case 0x85:
+                    LoadFlags(X);
                     break;
                 default:
                     std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";

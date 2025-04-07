@@ -192,7 +192,7 @@ void DrawSprite(uint16_t X, uint16_t Y, uint16_t N) {
     V[0xF] = 0;
 
     for (int i = 0; i < N; i++) {
-        if(clipping && (N + Y_coord) >= 32)
+        if(clipping && (i + Y_coord) >= 32)
             break;
 
         uint8_t sprite_row = ram[I + i];
@@ -309,7 +309,7 @@ void DrawSpriteSuperChip(uint16_t X, uint16_t Y, uint16_t N) {
     if(hires){
         for (int i = 0; i < N; i++)
         {
-            if (clipping && (N + Y_coord) >= 64)
+            if (clipping && (i + Y_coord) >= 64)
                 break;
 
             uint8_t sprite_row = ram[I + i];
@@ -327,7 +327,7 @@ void DrawSpriteSuperChip(uint16_t X, uint16_t Y, uint16_t N) {
     }else{
         for (int i = 0; i < N; i++)
         {
-            if (clipping && (N + Y_coord) >= 32)
+            if (clipping && (i + Y_coord) >= 32)
                 break;
 
             uint8_t sprite_row = ram[I + i];
@@ -369,36 +369,156 @@ void HiResOff(){
 
 //00CN
 void ScrollDown(uint16_t N){
-
+    display_flag = 1;
+    for (int i = 63-N; i >= 0; i--)
+    {
+        for (int j = 0; j < 128; j++)
+        {
+            display_hires[128 * (i + N) + j] = display_hires[128 * i + j];
+        }
+        
+    }
+    //Set Rows at top to 0
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < 128; j++)
+        {
+            display_hires[128*i + j] = 0;
+        }
+        
+    }
+    
 }
 
 //00FB
 void ScrollRight(){
-
+    display_flag = 1;
+    for (int i = 123; i >= 0; i--)
+    {
+        for (int j = 0; j < 64; j++)
+        {
+            display_hires[128*j + i+4] = display_hires[128*j + i];
+        }
+        
+    }
+    //Set left rows 0
+    for (int i = 0; i < 64; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            display_hires[128*i + j] = 0;
+        }
+        
+    }
 }
 
 //00FC
 void ScrollLeft(){
+    display_flag = 1;
+    for (int i = 4; i < 128; i++)
+    {
+        for (int j = 0; j < 64; j++)
+        {
+            display_hires[128*j + i - 4] = display_hires[128*j + i];
+        }
+        
+    }
+    //set right rows 0
+    for (int i = 0; i < 64; i++)
+    {
+        for (int j = 128; j >= 124; j++)
+        {
+            display_hires[128*i + j] = 0;
+        }
+        
+    }
 
 }
 
-//DXY0 16x16 sprite
+//DXY0 16x16 sprite in Hires 8x16 in lores
+//Tho there in the database its a quirk that they always draw 16x16 sprites
 void DrawBigSprite(uint16_t X, uint16_t Y){
+    display_flag = 1;
+    uint8_t X_coord = hires ? V[X] % 128 : V[X] % 64;
+    uint8_t Y_coord = hires ? V[Y] % 64 : V[Y] % 32;
+    V[0xF] = 0;
+    if(hires){
+        //Draw 16x16 sprite
+        for (int i = 0; i < 16; i++)
+        {
+            if (clipping && (i + Y_coord) >= 64)
+                break;
 
+            uint16_t sprite_row = ram[I + i*2] + (ram[I + i*2 + 1] << 8);
+            for (int b = 0; b < 16; b++)
+            {
+                if (clipping && (b + X_coord) >= 128)
+                    break;
+                uint8_t current_bit = (sprite_row >> (15 - b)) & 1;
+                uint16_t index = ((Y_coord + i) % 64) * 128 + ((X_coord + b) % 128);
+                if (current_bit && display_hires[index])
+                    V[0xF] = 0x1;
+                display_hires[index] ^= current_bit;
+            }
+        }
+    }else{
+        //Draw 8x16 sprite
+        for (int i = 0; i < 16; i++)
+        {
+            if (clipping && (i + Y_coord) >= 32)
+                break;
+
+            uint8_t sprite_row = ram[I + i];
+            for (int b = 0; b < 8; b++)
+            {
+                if (clipping && (b + X_coord) >= 64)
+                    break;
+
+                //For the large pixels in lores mode we got 4 pixels in 1
+                uint8_t current_bit = (sprite_row >> (7 - b)) & 1;
+
+                uint16_t indices[4] = {0};
+                indices[0] = (2*(Y_coord + i) % 64) * 128 + (2*(X_coord + b) % 128);
+                indices[1] = (2*(Y_coord + i) % 64) * 128 + (2*(X_coord + b) % 128) + 1;
+                indices[2] = (2*(Y_coord + i) % 64) * 128 + (2*(X_coord + b) % 128) + 128;
+                indices[3] = (2*(Y_coord + i) % 64) * 128 + (2*(X_coord + b) % 128) + 129;
+
+                for (int j = 0; j < 4; j++ )
+                {
+                    if (current_bit && display[indices[j]])
+                        V[0xF] = 0x1;
+                    display[indices[j]] ^= current_bit;
+                }                
+            }
+        }
+
+    }
 }
 
 //FX30
 void SetIndexLocBig(uint16_t X){
-
+  uint8_t character = V[X] & 0x0F;
+  I = 0xA0 + character * 10;
+  I %= 0x1000;
 }
 
 //FX75
-void SaveFlags(uint16_t X){
-
+void SaveFlags(uint16_t X)
+{
+    X %= 8;
+    for (int i = 0; i <= X; i++)
+    {
+        flags[i] = V[i];
+    }
 }
 
 //FX85
 void LoadFlags(uint16_t X){
+    X %= 8;
+    for (int i = 0; i <= X; i++)
+    {
+        V[i] = flags[i];
+    }
 
 }
 

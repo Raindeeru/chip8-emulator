@@ -10,7 +10,7 @@
         0
     ],
     "Quirks": {
-        "clipping": true,
+        "clipping": false,
         "display_wait": true,
         "jumping": false,
         "memory": true,

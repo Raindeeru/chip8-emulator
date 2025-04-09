@@ -1,9 +1,13 @@
 cmake_minimum_required(VERSION 3.16)
 project(chip8)
 
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED TRUE)
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
 message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
@@ -16,12 +20,15 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
 # This assumes the SDL source is available in vendored/SDL
 add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
+add_subdirectory(vendored/SDL_image EXCLUDE_FROM_ALL)
+add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
+add_subdirectory(vendored/ClayMan EXCLUDE_FROM_ALL)
 
 # Create your game executable target as usual
-add_executable(main src/config/menu.cpp res/resource.h src/main.cpp res/menu.rc src/chip8/fonts.cpp src/chip8/specs.cpp src/chip8/instructions.cpp src/chip8/input.cpp)
+add_executable(main vendored/ClayMan/clayman.cpp src/config/menu.cpp res/resource.h src/main.cpp res/menu.rc src/chip8/fonts.cpp src/chip8/specs.cpp src/chip8/instructions.cpp src/chip8/input.cpp src/sdl/clay_renderer_SDL3)
 
 # Link to the actual SDL3 library.
-target_link_libraries(main PRIVATE SDL3::SDL3 user32 gdi32)
+target_link_libraries(main PRIVATE SDL3_ttf::SDL3_ttf SDL3_image::SDL3_image SDL3::SDL3 user32 gdi32)
 
 configure_file(res/settings.json ${CMAKE_BINARY_DIR}/settings.json COPYONLY)
 configure_file(res/settings.json ${CMAKE_BINARY_DIR}/Debug/settings.json COPYONLY)

@@ -1,0 +1,31 @@
+vendored/SDL/CMakeFiles/SDL3-shared.dir/src/joystick/SDL_gamepad.c.obj: \
+ C:\dev\chip8\vendored\SDL\src\joystick\SDL_gamepad.c \
+ C:/dev/chip8/vendored/SDL/src/SDL_internal.h \
+ C:\dev\chip8\vendored\SDL\src\joystick\SDL_sysjoystick.h \
+ C:\dev\chip8\vendored\SDL\src\joystick\SDL_joystick_c.h \
+ C:\dev\chip8\vendored\SDL\src\joystick\SDL_steam_virtual_gamepad.h \
+ C:\dev\chip8\vendored\SDL\src\joystick\SDL_gamepad_c.h \
+ C:\dev\chip8\vendored\SDL\src\joystick\SDL_gamepad_db.h \
+ C:\dev\chip8\vendored\SDL\src\joystick\controller_type.h \
+ C:\dev\chip8\vendored\SDL\src\joystick\usb_ids.h \
+ C:\dev\chip8\vendored\SDL\src\joystick\hidapi/SDL_hidapi_nintendo.h \
+ C:/dev/chip8/vendored/SDL/src/events/SDL_events_c.h \
+ C:/dev/chip8/vendored/SDL/src/video/SDL_sysvideo.h \
+ C:/dev/chip8/vendored/SDL/include/SDL3/SDL_vulkan.h \
+ C:/dev/chip8/vendored/SDL/include/SDL3/SDL_stdinc.h \
+ C:/dev/chip8/vendored/SDL/include/SDL3/SDL_error.h \
+ C:/dev/chip8/vendored/SDL/include/SDL3/SDL_video.h \
+ C:/dev/chip8/vendored/SDL/include/SDL3/SDL_begin_code.h \
+ C:/dev/chip8/vendored/SDL/include/SDL3/SDL_close_code.h \
+ C:/dev/chip8/vendored/SDL/src/video/SDL_surface_c.h \
+ C:/dev/chip8/vendored/SDL/src/video/SDL_blit.h \
+ C:/dev/chip8/vendored/SDL/src/events/SDL_clipboardevents_c.h \
+ C:/dev/chip8/vendored/SDL/src/events/SDL_displayevents_c.h \
+ C:/dev/chip8/vendored/SDL/src/events/SDL_dropevents_c.h \
+ C:/dev/chip8/vendored/SDL/src/events/SDL_keyboard_c.h \
+ C:/dev/chip8/vendored/SDL/src/events/SDL_keymap_c.h \
+ C:/dev/chip8/vendored/SDL/src/events/SDL_mouse_c.h \
+ C:/dev/chip8/vendored/SDL/src/events/SDL_touch_c.h \
+ C:/dev/chip8/vendored/SDL/src/events/SDL_pen_c.h \
+ C:/dev/chip8/vendored/SDL/src/SDL_internal.h \
+ C:/dev/chip8/vendored/SDL/src/events/SDL_windowevents_c.h

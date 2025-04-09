@@ -1,0 +1,1 @@
+-IC:/dev/chip8/vendored/SDL_ttf/include -I"C:/dev/chip8/build/vendored/SDL/include-revision" -IC:/dev/chip8/vendored/SDL/include -IC:/dev/chip8/vendored/SDL_image/include

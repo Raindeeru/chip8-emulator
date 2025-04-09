@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/dev/chip8/vendored/SDL_ttf/src/version.rc
+winresrc.h
+C:/dev/chip8/vendored/SDL_ttf/src/winresrc.h
+

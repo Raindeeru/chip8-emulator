@@ -1,19 +1,5 @@
 #include <cstdint>
 #include <windows.h>
-#include "SDL3/SDL_error.h"
-#include "SDL3/SDL_events.h"
-#include "SDL3/SDL_init.h"
-#include "SDL3/SDL_oldnames.h"
-#include "SDL3/SDL_pixels.h"
-#include "SDL3/SDL_rect.h"
-#include "SDL3/SDL_render.h"
-#include "SDL3/SDL_scancode.h"
-#include "SDL3/SDL_stdinc.h"
-#include "SDL3/SDL_surface.h"
-#include "SDL3/SDL_timer.h"
-#include "SDL3/SDL_video.h"
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
@@ -27,8 +13,12 @@
 #include "chip8/instructions.h"
 #include "chip8/specs.h"
 #include "../res/resource.h"
+#include "../vendored/ClayMan/clayman.hpp"
+#include "sdl/clay_renderer_SDL3.c"
 #include "config/menu.h"
 #include <shobjidl.h> 
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
 namespace fs = std::filesystem;
 
 #define PIXEL_SCALE 10
@@ -201,6 +191,14 @@ int main(int argc, char *argv[])
         32);
     SDL_SetTextureScaleMode(tex, SDL_SCALEMODE_NEAREST);
 
+    SDL_Texture *tex_hires = SDL_CreateTexture(
+        renderer,
+        SDL_PIXELFORMAT_ARGB8888,
+        SDL_TEXTUREACCESS_STREAMING,
+        128,
+        64);
+    SDL_SetTextureScaleMode(tex_hires, SDL_SCALEMODE_NEAREST);
+
     SDL_FRect screen = {0,0, 64*PIXEL_SCALE, 32*PIXEL_SCALE};
 
     if (!win)
@@ -210,6 +208,7 @@ int main(int argc, char *argv[])
     running = true;
 
     uint32_t pixel_display[64 * 32] = {0};
+    uint32_t pixel_display_hires[128*64] = {0};
 
     int32_t tickInterval = 1000 / FPS;
     uint32_t lastUpdateTime = 0;
@@ -262,10 +261,19 @@ int main(int argc, char *argv[])
             }
         }
 
+        //Testing Clay
+        /////////////////////////////////////////////////
+
+
+
+        
+
+
+
+
+        ////////////////////////////////////////////////
+
         if(!rom_loaded) continue;
-
-
-
         // time control
         uint32_t currentTime = SDL_GetTicks();
         deltaTime = currentTime - lastUpdateTime;
@@ -313,11 +321,17 @@ int main(int argc, char *argv[])
             if (display_flag && display_wait)
                 break;
             uint16_t opcode = 0x0;
+            uint16_t program_counter = (uint16_t)pc; //debug
             opcode += ram[pc] << 8;
             opcode += ram[pc + 1];
 
             pc += 2;
-            DecodeOpcode(opcode);
+            if(superchip_mode)
+            {
+                DecodeOpcodeSuperChip(opcode);
+            }
+            else
+                DecodeOpcode(opcode);
         }
 
         memcpy(keystate, keymap, sizeof(keymap));
@@ -327,27 +341,49 @@ int main(int argc, char *argv[])
         void *rawPixels = NULL;
         int pitch = 0;
 
-        for (int i = 0; i < 64 * 32; i++)
+        if (superchip_mode)
         {
-            pixel_display[i] = display[i] > 0 ? LIGHT: DARK;
+            for (int i = 0; i < 128 * 64; i++)
+            {
+                pixel_display_hires[i] = display_hires[i] > 0 ? LIGHT : DARK;
+            }
+            if (SDL_LockTexture(tex_hires, NULL, &rawPixels, &pitch) == false)
+            {
+                std::cout << "Could not lock texture! " << SDL_GetError() << "\n";
+                return 1;
+            }
+
+            memcpy((uint8_t *)rawPixels, pixel_display_hires, sizeof(uint32_t) * 128 * 64);
+            SDL_UnlockTexture(tex_hires);
+
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            SDL_RenderClear(renderer);
+            SDL_RenderTexture(renderer, tex_hires, NULL, &screen);
         }
-        if (SDL_LockTexture(tex, NULL, &rawPixels, &pitch) == false)
+        else
         {
-            std::cout << "Could not lock texture! " << SDL_GetError() << "\n";
-            return 1;
+            for (int i = 0; i < 64 * 32; i++)
+            {
+                pixel_display[i] = display[i] > 0 ? LIGHT : DARK;
+            }
+            if (SDL_LockTexture(tex, NULL, &rawPixels, &pitch) == false)
+            {
+                std::cout << "Could not lock texture! " << SDL_GetError() << "\n";
+                return 1;
+            }
+
+            memcpy((uint8_t *)rawPixels, pixel_display, sizeof(uint32_t) * 64 * 32);
+            SDL_UnlockTexture(tex);
+
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            SDL_RenderClear(renderer);
+            SDL_RenderTexture(renderer, tex, NULL, &screen);
         }
-
-        memcpy((uint8_t *)rawPixels, pixel_display, sizeof(uint32_t) * 64 * 32);
-        SDL_UnlockTexture(tex);
-
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
-        SDL_RenderTexture(renderer, tex, NULL, &screen);
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
         // Debug stuff here
-        std::string debug = std::to_string(pc);
+        std::string debug = std::to_string(ram[pc]);
         if (!(SDL_RenderDebugText(renderer, 10, 10, debug.c_str())))
         {
             std::cout << "Could not render debug test " << SDL_GetError() << "\n";

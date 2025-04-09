@@ -1,0 +1,22 @@
+vendored/SDL/CMakeFiles/SDL3-shared.dir/src/render/gpu/SDL_shaders_gpu.c.obj: \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\SDL_shaders_gpu.c \
+ C:/dev/chip8/vendored/SDL/src/SDL_internal.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\SDL_shaders_gpu.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/spir-v.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/color.frag.spv.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/linepoint.vert.spv.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/texture_rgb.frag.spv.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/texture_rgb_pixelart.frag.spv.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/texture_rgba.frag.spv.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/texture_rgba_pixelart.frag.spv.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/tri_color.vert.spv.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/tri_texture.vert.spv.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/dxil.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/color.frag.dxil.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/linepoint.vert.dxil.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/texture_rgb.frag.dxil.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/texture_rgb_pixelart.frag.dxil.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/texture_rgba.frag.dxil.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/texture_rgba_pixelart.frag.dxil.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/tri_color.vert.dxil.h \
+ C:\dev\chip8\vendored\SDL\src\render\gpu\shaders/tri_texture.vert.dxil.h

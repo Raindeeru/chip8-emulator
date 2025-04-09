@@ -3,5 +3,6 @@
 
 #include <cstdint>
 void DecodeOpcode(uint16_t opcode);
+void DecodeOpcodeSuperChip(uint16_t opcode);
 
 #endif

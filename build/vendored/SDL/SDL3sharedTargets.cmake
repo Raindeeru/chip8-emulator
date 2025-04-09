@@ -58,32 +58,11 @@ set_target_properties(SDL3::SDL3-shared PROPERTIES
   INTERFACE_SDL_VERSION "SDL3"
 )
 
-# Import target "SDL3::SDL3-shared" for configuration "Debug"
-set_property(TARGET SDL3::SDL3-shared APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+# Import target "SDL3::SDL3-shared" for configuration ""
+set_property(TARGET SDL3::SDL3-shared APPEND PROPERTY IMPORTED_CONFIGURATIONS NOCONFIG)
 set_target_properties(SDL3::SDL3-shared PROPERTIES
-  IMPORTED_IMPLIB_DEBUG "C:/dev/chip8/build/vendored/SDL/Debug/SDL3.lib"
-  IMPORTED_LOCATION_DEBUG "C:/dev/chip8/build/Debug/SDL3.dll"
-  )
-
-# Import target "SDL3::SDL3-shared" for configuration "Release"
-set_property(TARGET SDL3::SDL3-shared APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(SDL3::SDL3-shared PROPERTIES
-  IMPORTED_IMPLIB_RELEASE "C:/dev/chip8/build/vendored/SDL/Release/SDL3.lib"
-  IMPORTED_LOCATION_RELEASE "C:/dev/chip8/build/Release/SDL3.dll"
-  )
-
-# Import target "SDL3::SDL3-shared" for configuration "MinSizeRel"
-set_property(TARGET SDL3::SDL3-shared APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
-set_target_properties(SDL3::SDL3-shared PROPERTIES
-  IMPORTED_IMPLIB_MINSIZEREL "C:/dev/chip8/build/vendored/SDL/MinSizeRel/SDL3.lib"
-  IMPORTED_LOCATION_MINSIZEREL "C:/dev/chip8/build/MinSizeRel/SDL3.dll"
-  )
-
-# Import target "SDL3::SDL3-shared" for configuration "RelWithDebInfo"
-set_property(TARGET SDL3::SDL3-shared APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(SDL3::SDL3-shared PROPERTIES
-  IMPORTED_IMPLIB_RELWITHDEBINFO "C:/dev/chip8/build/vendored/SDL/RelWithDebInfo/SDL3.lib"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/dev/chip8/build/RelWithDebInfo/SDL3.dll"
+  IMPORTED_IMPLIB_NOCONFIG "C:/dev/chip8/build/vendored/SDL/libSDL3.dll.a"
+  IMPORTED_LOCATION_NOCONFIG "C:/dev/chip8/build/SDL3.dll"
   )
 
 # Make sure the targets which have been exported in some other

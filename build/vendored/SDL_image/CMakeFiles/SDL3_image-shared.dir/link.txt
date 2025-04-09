@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\SDL3_image-shared.dir/objects.a
+C:\msys64\ucrt64\bin\ar.exe qc CMakeFiles\SDL3_image-shared.dir/objects.a @CMakeFiles\SDL3_image-shared.dir\objects1.rsp
+C:\msys64\ucrt64\bin\cc.exe -static-libgcc -Wl,--version-script=C:/dev/chip8/vendored/SDL_image/src/SDL_image.sym -Wl,--no-undefined -shared -o ..\..\SDL3_image.dll -Wl,--out-implib,libSDL3_image.dll.a -Wl,--major-image-version,0,--minor-image-version,3 -Wl,--whole-archive CMakeFiles\SDL3_image-shared.dir/objects.a -Wl,--no-whole-archive @CMakeFiles\SDL3_image-shared.dir\linkLibs.rsp

@@ -21,6 +21,9 @@ void ClearDisplay() {
   for (int i = 0; i < 64 * 32; i++) {
     display[i] = 0x0;
   }
+  for (int i = 0; i < 128 * 64; i++) {
+    display_hires[i] = 0x0;
+  }
 }
 
 // 00EE
@@ -319,9 +322,9 @@ void DrawSpriteSuperChip(uint16_t X, uint16_t Y, uint16_t N) {
                     break;
                 uint8_t current_bit = (sprite_row >> (7 - b)) & 1;
                 uint16_t index = ((Y_coord + i) % 64) * 128 + ((X_coord + b) % 128);
-                if (current_bit && display[index])
+                if (current_bit && display_hires[index])
                     V[0xF] = 0x1;
-                display[index] ^= current_bit;
+                display_hires[index] ^= current_bit;
             }
         }
     }else{
@@ -347,9 +350,9 @@ void DrawSpriteSuperChip(uint16_t X, uint16_t Y, uint16_t N) {
 
                 for (int j = 0; j < 4; j++ )
                 {
-                    if (current_bit && display[indices[j]])
+                    if (current_bit && display_hires[indices[j]])
                         V[0xF] = 0x1;
-                    display[indices[j]] ^= current_bit;
+                    display_hires[indices[j]] ^= current_bit;
                 }                
             }
         }
@@ -360,15 +363,18 @@ void DrawSpriteSuperChip(uint16_t X, uint16_t Y, uint16_t N) {
 //00FF
 void HiResOn(){
     hires = true;
+    ClearDisplay();
 }
 
 //00FE
 void HiResOff(){
     hires = false;
+    ClearDisplay();
 }
 
 //00CN
 void ScrollDown(uint16_t N){
+    std::cout << "hey down";
     display_flag = 1;
     for (int i = 63-N; i >= 0; i--)
     {
@@ -392,6 +398,7 @@ void ScrollDown(uint16_t N){
 
 //00FB
 void ScrollRight(){
+    std::cout << "hey right";
     display_flag = 1;
     for (int i = 123; i >= 0; i--)
     {
@@ -414,6 +421,7 @@ void ScrollRight(){
 
 //00FC
 void ScrollLeft(){
+    std::cout << "hey left";
     display_flag = 1;
     for (int i = 4; i < 128; i++)
     {
@@ -426,7 +434,7 @@ void ScrollLeft(){
     //set right rows 0
     for (int i = 0; i < 64; i++)
     {
-        for (int j = 128; j >= 124; j++)
+        for (int j = 127; j >= 123; j--)
         {
             display_hires[128*i + j] = 0;
         }
@@ -485,7 +493,7 @@ void DrawBigSprite(uint16_t X, uint16_t Y){
 
                 for (int j = 0; j < 4; j++ )
                 {
-                    if (current_bit && display[indices[j]])
+                    if (current_bit && display_hires[indices[j]])
                         V[0xF] = 0x1;
                     display[indices[j]] ^= current_bit;
                 }                
@@ -705,7 +713,7 @@ void DecodeOpcodeSuperChip(uint16_t opcode) {
                 if((NNN & 0xFF0) == 0x0C0){
                     ScrollDown(N);
                 }else{
-                    std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+                    std::cout << "Invalid Instruction 0: " << std::hex << opcode << "\n" << "address: " << pc - 0x200 << "\n";
                 }
                 break;
             }
@@ -724,7 +732,7 @@ void DecodeOpcodeSuperChip(uint16_t opcode) {
             break;
         case 0x5:
             if(N==0) JumpEqVXVY(X, Y);
-            else std::cout << "Invalid Instruction: " << std::hex << opcode;
+            else std::cout << "Invalid Instruction: 5" << std::hex << opcode;
             break;
         case 0x6:
             SetVXNN(X, NN);
@@ -762,13 +770,13 @@ void DecodeOpcodeSuperChip(uint16_t opcode) {
                     ShiftLeft(X, Y);
                     break;
                 default:
-                    std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+                    std::cout << "Invalid Instruction: 8" << std::hex << opcode << "\n";
                     break;
             }
             break;
         case 0x9:
             if(N == 0) JumpNqVXVY(X, Y);
-            else std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+            else std::cout << "Invalid Instruction: 9" << std::hex << opcode << "\n";
             break;
         case 0xa:
             SetIndexRegister(NNN);
@@ -794,7 +802,7 @@ void DecodeOpcodeSuperChip(uint16_t opcode) {
                     JumpIfNotPress(X);
                     break;
                 default:
-                    std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+                    std::cout << "Invalid Instruction E: " << std::hex << opcode << "\n";
                     break;
             }
             break;
@@ -837,7 +845,7 @@ void DecodeOpcodeSuperChip(uint16_t opcode) {
                     LoadFlags(X);
                     break;
                 default:
-                    std::cout << "Invalid Instruction: " << std::hex << opcode << "\n";
+                    std::cout << "Invalid Instruction F: " << std::hex << opcode << "\n" ;
             }
             break;
         default:

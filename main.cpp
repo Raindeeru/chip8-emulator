@@ -13,12 +13,12 @@
 #include "src/chip8/instructions.h"
 #include "src/chip8/specs.h"
 #include "res/resource.h"
-#include "vendored/ClayMan/clayman.hpp"
-#include "vendored/Clay/renderer/clay_renderer_SDL3.c"
 #include "src/config/menu.h"
+#include "src/ui/ui.h"
 #include <shobjidl.h> 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include <SDL3_ttf/SDL_ttf.h>
 namespace fs = std::filesystem;
 
 #define PIXEL_SCALE 10
@@ -119,6 +119,7 @@ int main(int argc, char *argv[])
 
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    TTF_Init();
 
     //testing the audio
     SDL_AudioSpec spec = {SDL_AUDIO_S16, 22050};
@@ -139,6 +140,7 @@ int main(int argc, char *argv[])
 
     SDL_Window *win = SDL_CreateWindow("Chip-8", 64 * PIXEL_SCALE, menu_height + (32 * PIXEL_SCALE), SDL_WINDOW_OPENGL);
     SDL_SetWindowResizable(win, true);
+    SDL_SetWindowMinimumSize(win, 64*PIXEL_SCALE, 32*PIXEL_SCALE);
     
     //For Menu Stuff
     HWND hwnd = (HWND)SDL_GetPointerProperty(SDL_GetWindowProperties(win), SDL_PROP_WINDOW_WIN32_HWND_POINTER, NULL);
@@ -189,6 +191,7 @@ int main(int argc, char *argv[])
         SDL_TEXTUREACCESS_STREAMING,
         64,
         32);
+    
     SDL_SetTextureScaleMode(tex, SDL_SCALEMODE_NEAREST);
 
     SDL_Texture *tex_hires = SDL_CreateTexture(
@@ -197,9 +200,8 @@ int main(int argc, char *argv[])
         SDL_TEXTUREACCESS_STREAMING,
         128,
         64);
+    
     SDL_SetTextureScaleMode(tex_hires, SDL_SCALEMODE_NEAREST);
-
-    SDL_FRect screen = {0,0, 64*PIXEL_SCALE, 32*PIXEL_SCALE};
 
     if (!win)
     {
@@ -219,6 +221,7 @@ int main(int argc, char *argv[])
     int count = 0;
     int current_sine_sample = 0;
 
+
     while (running)
     {
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -237,43 +240,23 @@ int main(int argc, char *argv[])
                 running = false;
                 break;
             case SDL_EVENT_WINDOW_RESIZED:
-                int height;
-                int width;
-                SDL_GetWindowSize(win, &width, &height);
-                if((float)width/height > 2){
-                    //screen is wide
-                    screen.h = height;
-                    screen.w = screen.h * 2;
-
-                    screen.y = 0;
-                    screen.x = (width - screen.w)/2;
-
-                }else{
-                    //screen is tall
-                    screen.w = width;
-                    screen.h = screen.w/2;
-
-                    screen.x = 0;
-                    screen.y = (height- screen.h)/2;
-                }
+                ChangeScreenSize(win);
+                break;
+            case SDL_EVENT_MOUSE_BUTTON_DOWN:
+                ToggleDebug(win);
+                break;
             default:
                 break;
             }
         }
 
-        //Testing Clay
-        /////////////////////////////////////////////////
 
+        if(!rom_loaded) {
 
-
-        
-
-
-
-
-        ////////////////////////////////////////////////
-
-        if(!rom_loaded) continue;
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            SDL_RenderPresent(renderer);
+            continue;
+        }
         // time control
         uint32_t currentTime = SDL_GetTicks();
         deltaTime = currentTime - lastUpdateTime;
@@ -358,7 +341,7 @@ int main(int argc, char *argv[])
 
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             SDL_RenderClear(renderer);
-            SDL_RenderTexture(renderer, tex_hires, NULL, &screen);
+            SDL_RenderTexture(renderer, tex_hires, NULL, &chip8_screen);
         }
         else
         {
@@ -377,8 +360,26 @@ int main(int argc, char *argv[])
 
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             SDL_RenderClear(renderer);
-            SDL_RenderTexture(renderer, tex, NULL, &screen);
+            SDL_RenderTexture(renderer, tex, NULL, &chip8_screen);
         }
+
+        SDL_FRect rect_test = {
+            .x = 0,
+            .y =0,
+            .w = 50,
+            .h = 50
+        };
+        
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &rect_test);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+        if (debug_mode)
+        {
+            RenderInstructionContainer(renderer);
+            RenderRegisterContainer(renderer);
+        }
+        
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
@@ -389,7 +390,7 @@ int main(int argc, char *argv[])
             std::cout << "Could not render debug test " << SDL_GetError() << "\n";
         }
 
-        SDL_RenderPresent(renderer);
+        SDL_RenderPresent(renderer); 
     }
 
     SDL_DestroyWindow(win);

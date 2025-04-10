@@ -1,3 +1,0 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\SDL3-shared.dir/objects.a
-C:\msys64\ucrt64\bin\ar.exe qc CMakeFiles\SDL3-shared.dir/objects.a @CMakeFiles\SDL3-shared.dir\objects1.rsp
-C:\msys64\ucrt64\bin\cc.exe -Wl,--version-script=C:/dev/chip8/vendored/SDL/src/dynapi/SDL_dynapi.sym -Wl,--no-undefined -static-libgcc -shared -o ..\..\SDL3.dll -Wl,--out-implib,libSDL3.dll.a -Wl,--major-image-version,0,--minor-image-version,0 -Wl,--whole-archive CMakeFiles\SDL3-shared.dir/objects.a -Wl,--no-whole-archive @CMakeFiles\SDL3-shared.dir\linkLibs.rsp

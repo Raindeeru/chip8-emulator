@@ -1,1 +1,0 @@
--IC:/dev/chip8/vendored/SDL_ttf/include -I"C:/dev/chip8/build/vendored/SDL/include-revision" -IC:/dev/chip8/vendored/SDL/include -isystem C:/msys64/ucrt64/include/harfbuzz -isystem C:/msys64/ucrt64/include/freetype2

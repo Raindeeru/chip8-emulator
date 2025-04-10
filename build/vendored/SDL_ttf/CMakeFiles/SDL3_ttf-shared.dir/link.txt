@@ -1,3 +1,0 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\SDL3_ttf-shared.dir/objects.a
-C:\msys64\ucrt64\bin\ar.exe qc CMakeFiles\SDL3_ttf-shared.dir/objects.a @CMakeFiles\SDL3_ttf-shared.dir\objects1.rsp
-C:\msys64\ucrt64\bin\cc.exe -static-libgcc -Wl,--no-undefined -Wl,--version-script=C:/dev/chip8/vendored/SDL_ttf/src/SDL_ttf.sym -shared -o ..\..\SDL3_ttf.dll -Wl,--out-implib,libSDL3_ttf.dll.a -Wl,--major-image-version,0,--minor-image-version,3 -Wl,--whole-archive CMakeFiles\SDL3_ttf-shared.dir/objects.a -Wl,--no-whole-archive @CMakeFiles\SDL3_ttf-shared.dir\linkLibs.rsp

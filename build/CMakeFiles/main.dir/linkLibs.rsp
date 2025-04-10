@@ -1,1 +1,0 @@
- vendored/SDL_ttf/libSDL3_ttf.dll.a vendored/SDL_image/libSDL3_image.dll.a vendored/SDL/libSDL3.dll.a -luser32 -lgdi32 -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

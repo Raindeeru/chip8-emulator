@@ -22,13 +22,23 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 add_subdirectory(vendored/SDL_image EXCLUDE_FROM_ALL)
 add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
-add_subdirectory(vendored/ClayMan EXCLUDE_FROM_ALL)
 
 # Create your game executable target as usual
-add_executable(main vendored/ClayMan/clayman.cpp src/config/menu.cpp res/resource.h src/main.cpp res/menu.rc src/chip8/fonts.cpp src/chip8/specs.cpp src/chip8/instructions.cpp src/chip8/input.cpp src/sdl/clay_renderer_SDL3)
+# I have no clue how and what to put here, sometimes i need to put something here sometimes I dont so what the fuck
+add_executable(Chip8 
+    main.cpp 
+    res/menu.rc 
+    src/chip8/fonts.cpp 
+    src/chip8/specs.cpp 
+    src/chip8/instructions.cpp 
+    src/chip8/input.cpp 
+    vendored/ClayMan/clayman.cpp 
+    src/config/menu.cpp 
+    res/resource.h
+)
 
 # Link to the actual SDL3 library.
-target_link_libraries(main PRIVATE SDL3_ttf::SDL3_ttf SDL3_image::SDL3_image SDL3::SDL3 user32 gdi32)
+target_link_libraries(Chip8 PRIVATE SDL3_ttf::SDL3_ttf SDL3_image::SDL3_image SDL3::SDL3 user32 gdi32)
 
 configure_file(res/settings.json ${CMAKE_BINARY_DIR}/settings.json COPYONLY)
 configure_file(res/settings.json ${CMAKE_BINARY_DIR}/Debug/settings.json COPYONLY)

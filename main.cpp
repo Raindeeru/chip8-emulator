@@ -374,13 +374,6 @@ int main(int argc, char *argv[])
         SDL_RenderFillRect(renderer, &rect_test);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
-        if (debug_mode)
-        {
-            RenderInstructionContainer(renderer);
-            RenderRegisterContainer(renderer);
-        }
-        
-
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
         // Debug stuff here

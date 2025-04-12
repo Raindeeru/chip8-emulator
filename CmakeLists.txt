@@ -34,10 +34,16 @@ add_executable(Chip8
     src/config/menu.cpp 
     src/ui/ui.cpp
     res/resource.h
+    vendored/ImGui/backends/imgui_impl_sdl3.cpp
+    vendored/ImGui/backends/imgui_impl_sdlrenderer3.cpp
+    vendored/ImGui/imgui.cpp
+    vendored/ImGui/imgui_draw.cpp
+    vendored/ImGui/imgui_tables.cpp
+    vendored/ImGui/imgui_widgets.cpp
+    vendored/ImGui/imgui_demo.cpp
 )
 
 # Link to the actual SDL3 library.
 target_link_libraries(Chip8 PRIVATE SDL3_ttf::SDL3_ttf SDL3::SDL3 user32 gdi32)
 
-configure_file(res/settings.json ${CMAKE_BINARY_DIR}/settings.json COPYONLY)
 configure_file(res/settings.json ${CMAKE_BINARY_DIR}/Debug/settings.json COPYONLY)

@@ -19,6 +19,9 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include "vendored/ImGui/imgui.h"
+#include "vendored/ImGui/imgui_impl_sdl3.h"
+#include "vendored/ImGui/imgui_impl_sdlrenderer3.h"
 namespace fs = std::filesystem;
 
 #define PIXEL_SCALE 10
@@ -221,6 +224,19 @@ int main(int argc, char *argv[])
     int count = 0;
     int current_sine_sample = 0;
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplSDL3_InitForSDLRenderer(win, renderer);
+    ImGui_ImplSDLRenderer3_Init(renderer);
+
+    bool show_demo = true;
 
     while (running)
     {
@@ -234,26 +250,36 @@ int main(int argc, char *argv[])
         SDL_Event event;
         if (SDL_PollEvent(&event))
         {
+            ImGui_ImplSDL3_ProcessEvent(&event);
             switch (event.type)
             {
             case SDL_EVENT_QUIT:
                 running = false;
                 break;
             case SDL_EVENT_WINDOW_RESIZED:
-                ChangeScreenSize(win);
                 break;
             case SDL_EVENT_MOUSE_BUTTON_DOWN:
-                ToggleDebug(win);
                 break;
             default:
                 break;
             }
         }
 
+        ImGui_ImplSDLRenderer3_NewFrame();
+        ImGui_ImplSDL3_NewFrame();
+        ImGui::NewFrame();
+
+        if(show_demo){
+            ImGui::ShowDemoWindow(&show_demo);
+        }
+
+        ImGui::Render();
 
         if(!rom_loaded) {
 
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            SDL_RenderClear(renderer);
+            ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
             SDL_RenderPresent(renderer);
             continue;
         }
@@ -338,10 +364,6 @@ int main(int argc, char *argv[])
 
             memcpy((uint8_t *)rawPixels, pixel_display_hires, sizeof(uint32_t) * 128 * 64);
             SDL_UnlockTexture(tex_hires);
-
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            SDL_RenderClear(renderer);
-            SDL_RenderTexture(renderer, tex_hires, NULL, &chip8_screen);
         }
         else
         {
@@ -357,30 +379,6 @@ int main(int argc, char *argv[])
 
             memcpy((uint8_t *)rawPixels, pixel_display, sizeof(uint32_t) * 64 * 32);
             SDL_UnlockTexture(tex);
-
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            SDL_RenderClear(renderer);
-            SDL_RenderTexture(renderer, tex, NULL, &chip8_screen);
-        }
-
-        SDL_FRect rect_test = {
-            .x = 0,
-            .y =0,
-            .w = 50,
-            .h = 50
-        };
-        
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &rect_test);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-        // Debug stuff here
-        std::string debug = std::to_string(ram[pc]);
-        if (!(SDL_RenderDebugText(renderer, 10, 10, debug.c_str())))
-        {
-            std::cout << "Could not render debug test " << SDL_GetError() << "\n";
         }
 
         SDL_RenderPresent(renderer); 

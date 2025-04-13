@@ -41,6 +41,11 @@ extern bool jumping;
 //Other Options
 extern bool sound_on_press;
 
+//Debug Options
+extern bool debug_mode;
+extern bool paused;
+extern bool stepped;
+
 void Chip8_Init();
 
 #endif

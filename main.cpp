@@ -25,8 +25,7 @@
 namespace fs = std::filesystem;
 
 #define PIXEL_SCALE 10
-#define FPS 60
-#define IPF 11
+#define FPS 60.0f
 
 #define LIGHT 0xFFd7bcad
 #define DARK 0xFF452f47
@@ -35,6 +34,10 @@ bool running = false;
 WNDPROC SDLWndProc = nullptr;
 fs::path settings_path;
 HMENU menu = NULL;
+SDL_Window* win;
+
+int IPS;
+int IPF;
 
 LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -93,7 +96,6 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 LoadRomFromPath(current_rom);
             break;
         case ID_JUMPING:
-            std::cout << "Hey";
             UpdateQuirk(JUMPING, settings_path);
             if (current_settings["Quirks"]["jumping"])
                 CheckMenuItem(menu, ID_JUMPING, MF_CHECKED);
@@ -103,7 +105,38 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 LoadRomFromPath(current_rom);
             break;
 
+        case ID_DEBUG:
+            ToggleDebug(win);
+            if(debug_mode){
+                CheckMenuItem(menu, ID_DEBUG, MF_CHECKED);
+            }else{
+                CheckMenuItem(menu, ID_DEBUG, MF_UNCHECKED);
+            }
+            break;
+        case ID_PAUSE:
+            paused = !paused;
+            if(paused){
+                CheckMenuItem(menu, ID_PAUSE, MF_CHECKED);
+            }else{
+                CheckMenuItem(menu, ID_PAUSE, MF_UNCHECKED);
+            }
+            break;
+        
+        case ID_STEP:
+            if(rom_loaded)
+                stepped = true;
+            break;
+
         default:
+            for(int i = ID_500; i <= ID_1000; i += 100){
+                if(LOWORD(wParam) == i){
+                    CheckMenuItem(menu, i, MF_CHECKED);
+                    IPS = i+1;
+                    IPF = (int)std::round((float)IPS / (float)FPS);
+                }else{
+                    CheckMenuItem(menu, i, MF_UNCHECKED);
+                }
+            }
             break;
         }
         return 0;
@@ -115,11 +148,11 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 int main(int argc, char *argv[])
 {
+    IPS = ID_700 + 1; //I defined the speed id to be the speed - 1
     fs::path exe_path = fs::path(argv[0]).parent_path();
     settings_path = exe_path / "settings.json";
     ParseSettings(settings_path);
     MSG msg = {};
-
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     TTF_Init();
@@ -141,7 +174,7 @@ int main(int argc, char *argv[])
 
     int menu_height = GetSystemMetrics(SM_CYMENU);
 
-    SDL_Window *win = SDL_CreateWindow("Chip-8", 64 * PIXEL_SCALE, menu_height + (32 * PIXEL_SCALE), SDL_WINDOW_OPENGL);
+    win = SDL_CreateWindow("Chip-8", 64 * PIXEL_SCALE, menu_height + (32 * PIXEL_SCALE), SDL_WINDOW_OPENGL);
     SDL_SetWindowResizable(win, true);
     SDL_SetWindowMinimumSize(win, 64*PIXEL_SCALE, 32*PIXEL_SCALE);
     
@@ -183,6 +216,13 @@ int main(int argc, char *argv[])
         else
             CheckMenuItem(menu, ID_JUMPING, MF_UNCHECKED);
 
+        //For the speed
+        for(int i = ID_500; i <= ID_1000; i += 100){
+            CheckMenuItem(menu, i, MF_UNCHECKED);
+            if(i+1 == IPS)
+                CheckMenuItem(menu, i, MF_CHECKED);
+        }
+
         SetMenu(hwnd, menu);
     }
 
@@ -219,7 +259,7 @@ int main(int argc, char *argv[])
     uint32_t lastUpdateTime = 0;
     int32_t deltaTime = 0;
 
-    DecodeOpcode((uint16_t)0xABCD);
+    IPF = (int)std::round((float)IPS / (float)FPS); 
 
     int count = 0;
     int current_sine_sample = 0;
@@ -236,10 +276,9 @@ int main(int argc, char *argv[])
     ImGui_ImplSDL3_InitForSDLRenderer(win, renderer);
     ImGui_ImplSDLRenderer3_Init(renderer);
 
-    bool show_demo = true;
-
     while (running)
     {
+
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&msg);
@@ -256,6 +295,13 @@ int main(int argc, char *argv[])
             case SDL_EVENT_QUIT:
                 running = false;
                 break;
+            case SDL_EVENT_KEY_DOWN:
+                if (event.key.repeat == false && event.key.scancode == SDL_SCANCODE_F4)
+                    ToggleDebug(win);
+                if (event.key.scancode == SDL_SCANCODE_F6)
+                    stepped = true;
+                if (event.key.repeat == false && event.key.scancode == SDL_SCANCODE_F5)
+                    paused = !paused;
             case SDL_EVENT_WINDOW_RESIZED:
                 break;
             case SDL_EVENT_MOUSE_BUTTON_DOWN:
@@ -265,19 +311,16 @@ int main(int argc, char *argv[])
             }
         }
 
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
 
-        if(show_demo){
-            ImGui::ShowDemoWindow(&show_demo);
-        }
-
-        ImGui::Render();
 
         if(!rom_loaded) {
-
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            RenderChip8Screen(win, rom_loaded);
+            ImGui::Render();
             SDL_RenderClear(renderer);
             ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
             SDL_RenderPresent(renderer);
@@ -289,9 +332,12 @@ int main(int argc, char *argv[])
 
         int32_t timeToSleep = tickInterval - deltaTime;
 
+        std::cout << "IPF: " << IPF << " IPS: " << IPS << "\n";
+
         if (timeToSleep > 0)
         {
             SDL_Delay(timeToSleep);
+            lastUpdateTime += tickInterval;
         }
 
         lastUpdateTime = currentTime;
@@ -325,22 +371,44 @@ int main(int argc, char *argv[])
         // fetch decode execute logic here
         // fetch
 
-        for (int i = 0; i < IPF; i++)
-        {
-            if (display_flag && display_wait)
-                break;
-            uint16_t opcode = 0x0;
-            uint16_t program_counter = (uint16_t)pc; //debug
-            opcode += ram[pc] << 8;
-            opcode += ram[pc + 1];
+        if(paused){
+            if(stepped){
+                if (display_flag && display_wait)
+                    break;
+                uint16_t opcode = 0x0;
+                uint16_t program_counter = (uint16_t)pc; // debug
+                opcode += ram[pc] << 8;
+                opcode += ram[pc + 1];
 
-            pc += 2;
-            if(superchip_mode)
-            {
-                DecodeOpcodeSuperChip(opcode);
+                pc += 2;
+                if (superchip_mode)
+                {
+                    DecodeOpcodeSuperChip(opcode);
+                }
+                else
+                    DecodeOpcode(opcode);
+
+                stepped = false;
             }
-            else
-                DecodeOpcode(opcode);
+
+        }else{
+            for (int i = 0; i < IPF; i++)
+            {
+                if (display_flag && display_wait)
+                    break;
+                uint16_t opcode = 0x0;
+                uint16_t program_counter = (uint16_t)pc; // debug
+                opcode += ram[pc] << 8;
+                opcode += ram[pc + 1];
+
+                pc += 2;
+                if (superchip_mode)
+                {
+                    DecodeOpcodeSuperChip(opcode);
+                }
+                else
+                    DecodeOpcode(opcode);
+            }
         }
 
         memcpy(keystate, keymap, sizeof(keymap));
@@ -381,6 +449,11 @@ int main(int argc, char *argv[])
             SDL_UnlockTexture(tex);
         }
 
+        RenderChip8Screen(win, rom_loaded, tex);
+
+        ImGui::Render();
+        SDL_RenderClear(renderer);
+        ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
         SDL_RenderPresent(renderer); 
     }
 

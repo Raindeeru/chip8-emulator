@@ -15,5 +15,20 @@ BEGIN
         MENUITEM "Shifting", ID_SHIFTING
         MENUITEM "Jumping", ID_JUMPING
     END
+    POPUP "Speed"
+    BEGIN
+        MENUITEM "500", ID_500
+        MENUITEM "600", ID_600
+        MENUITEM "700", ID_700
+        MENUITEM "800", ID_800
+        MENUITEM "900", ID_900
+        MENUITEM "1000", ID_1000
+    END
+    POPUP "Debug"
+    BEGIN
+        MENUITEM "View Debug\tF4" ID_DEBUG
+        MENUITEM "Pause\tF5" ID_PAUSE
+        MENUITEM "Step Instruction\tF6" ID_STEP 
+    END
 END
     

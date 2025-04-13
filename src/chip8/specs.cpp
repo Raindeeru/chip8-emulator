@@ -39,6 +39,11 @@ bool jumping = false;
 
 bool sound_on_press = false;
 
+//Debug Stuff
+bool debug_mode = false;
+bool paused = false;
+bool stepped = false;
+
 void Chip8_Init() {
     memset(ram, 0, sizeof(ram));
     memset(stack, 0, sizeof(stack));

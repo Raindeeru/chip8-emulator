@@ -9,6 +9,8 @@
 
 #define ID_RECENT_START 1400
 
+#define ID_SUPERCHIP 1004
+
 //Quirks
 #define ID_CLIPPING 1101  
 #define ID_MEMORY 1102

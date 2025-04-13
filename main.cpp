@@ -140,7 +140,12 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 AddRecentFiles(menu);
             }
             break;
-
+        case ID_SUPERCHIP:
+            superchip_mode = !superchip_mode;
+            (superchip_mode)?
+                CheckMenuItem(menu, ID_SUPERCHIP, MF_CHECKED):
+                CheckMenuItem(menu, ID_SUPERCHIP, MF_UNCHECKED);
+            break;
         default:
             for(int i = ID_500; i <= ID_1000; i += 100){
                 if(LOWORD(wParam) == i){
@@ -244,6 +249,7 @@ int main(int argc, char *argv[])
                 CheckMenuItem(menu, i, MF_CHECKED);
         }
 
+        (superchip_mode) ? CheckMenuItem(menu, ID_SUPERCHIP, MF_CHECKED) : CheckMenuItem(menu, ID_SUPERCHIP, MF_UNCHECKED);
         EnableMenuItem(menu, ID_STEP, MF_BYCOMMAND | MF_GRAYED);
         DrawMenuBar(hwnd);
 
@@ -425,8 +431,9 @@ int main(int argc, char *argv[])
                 {
                     DecodeOpcodeSuperChip(opcode);
                 }
-                else
+                else{
                     DecodeOpcode(opcode);
+                }
 
                 stepped = false;
             }
@@ -434,8 +441,9 @@ int main(int argc, char *argv[])
         }else{
             for (int i = 0; i < IPF; i++)
             {
-                if (display_flag && display_wait)
+                if (display_flag && display_wait){
                     break;
+                }
                 uint16_t opcode = 0x0;
                 uint16_t program_counter = (uint16_t)pc; // debug
                 opcode += ram[pc] << 8;
@@ -446,8 +454,9 @@ int main(int argc, char *argv[])
                 {
                     DecodeOpcodeSuperChip(opcode);
                 }
-                else
+                else{
                     DecodeOpcode(opcode);
+                }
             }
         }
 
@@ -489,7 +498,10 @@ int main(int argc, char *argv[])
             SDL_UnlockTexture(tex);
         }
 
-        RenderChip8Screen(win, rom_loaded, tex);
+        if(superchip_mode)
+            RenderChip8Screen(win, rom_loaded, tex_hires);
+        else
+            RenderChip8Screen(win, rom_loaded, tex);
 
         ImGui::Render();
         SDL_RenderClear(renderer);

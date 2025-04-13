@@ -11,14 +11,18 @@ BEGIN
         END
         MENUITEM "Reload Rom\tF2", ID_RELOAD, GRAYED
     END
-    POPUP "Quirks"
+    POPUP "Options"
     BEGIN
-        MENUITEM "VF Reset", ID_VF_RESET 
-        MENUITEM "Memory", ID_MEMORY
-        MENUITEM "Display Wait", ID_DISPLAY_WAIT
-        MENUITEM "Clipping", ID_CLIPPING
-        MENUITEM "Shifting", ID_SHIFTING
-        MENUITEM "Jumping", ID_JUMPING
+        POPUP "Quirks"
+        BEGIN
+            MENUITEM "VF Reset", ID_VF_RESET 
+            MENUITEM "Memory", ID_MEMORY
+            MENUITEM "Display Wait", ID_DISPLAY_WAIT
+            MENUITEM "Clipping", ID_CLIPPING
+            MENUITEM "Shifting", ID_SHIFTING
+            MENUITEM "Jumping", ID_JUMPING
+        END
+        MENUITEM "SuperChip Mode", ID_SUPERCHIP
     END
     POPUP "Speed"
     BEGIN

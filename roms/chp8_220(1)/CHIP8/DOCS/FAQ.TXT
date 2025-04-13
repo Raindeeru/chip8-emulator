@@ -1,0 +1,174 @@
+                    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+                    ³           CHIP8 FAQs           ³
+                    ³ - Frequently Asked Questions - ³
+                    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Q: Is it legal to copy CHIP-8 and SUPER-CHIP programs ?
+
+A: Most of these programs are FREE, because they are FREEWARE.
+   Therefore, it is legal to copy and distribute them.
+   Concerning the original CHIP-8 programs, these ones were released on
+   audiocassete and paper listing. As no copyright has been found on the
+   listings and program titles (when running), it is legal to copy them.
+   HOWEVER, IT IS NOT LEGAL TO SELL THESE PROGRAMS. IT IS ALSO NOT LEGAL
+   TO DISTRIBUTE THESE PROGRAMS IN ANY NON-FREE MANNER.
+
+
+Q: I can't run CHIP8. CHIP8 tells me that the program I want to run doesn't
+   exist.
+
+A: The name of your program is badly specified. Don't forget to include a
+   path to access the program. For example, you must not run BRIX by typing
+   CHIP8 BRIX. Just type CHIP8 GAMES\BRIX.
+
+
+
+Q: The name of the program I want to run is correct, but CHIP8 still refuses
+   to run it, crashes or runs it too fast to play it.
+
+A: Your program may have been corrupted, or badly transfered. Try to copy it
+   again, and run CHIP8 again. Make sure your PC is an AT, and not an XT.
+
+
+
+Q: The program runs OK, but the keyboard seems to be not accessible.
+
+A: Be sure that the Num-Lock mode is ON. If not, the CHIP8 keyboard cannot
+   be used.
+
+
+
+Q: CHIP8 runs very slowly.
+
+A: You may have run CHIP8 under WINDOWS. This is due to the CPU time that
+   CHIP8 requires, which can be insufficient. On some fast machines, this
+   can also be due to the fact that CHIP8 has been run under the DOS window.
+   Press Alt+Enter. This may accelerate the speed.
+
+
+
+Q: As mentioned in the documentations, I can disassemble a SNAPSHOT file to
+   see its contents. When I run UNCHIP on my file, I obtain a bad result.
+
+A: UNCHIP considers a SNAPSHOT file by its name. If the name of your file
+   is not "SNAPSHOT", UNCHIP will disassemble it as a program, not as a
+   snapshot.
+
+
+
+Q: How can I transfer some CHIP8 programs from my HP48 ?
+
+A: This depends on the type of your HP48. Run the TERMINAL under WINDOWS.
+   Configure the transfer in KERMIT mode if you have an HP48S(x), or in
+   XMODEM mode if you have an HP48G(x). Be sure that your HP48 transfer
+   mode is set to BINARY, and the baud rate is set to 9600 BAUDS, without
+   parity and in WIRE mode. Make sure that the TERMINAL is set to 9600 BAUDS,
+   without parity. Then, go to the TRANSFER menu and choose "Receive Binary".
+   On your HP48S(x), type 'Program_Name' SEND. On your HP48G(x), type XSEND
+   instead of SEND. If everything is correctly configured and you have your
+   CHIP8 program stored in variables, the transfer should start after a few
+   seconds.
+
+
+
+Q: I transfered my program, but after executing FIX_CHIP, I get an error,
+   or my program doesn't run correctly.
+
+A: Your program may have been badly transfered or corrupted. If the problem
+   persists, you have a transfer configuration error.
+
+
+
+Q: Where can I find CHIP8 utilities ? Is CHIP-8 available on the internet ?
+
+A: On the Internet, you can find several programs. For example, go to:
+   http://src.doc.ic.ac.uk/packages/hp48/chip8
+   Else go to LYCOS at http://www.lycos.com, and make a research with some
+   keywords like CHIP8, CHIP, CHIP48, etc...
+   The official home-page of CHIP-8 is http://services.worldnet.net/winter
+
+
+
+Q: I have disassembled a CHIP8 program, but the source doesn't correspond
+   to what I expected. For example, there are illegal instructions at come
+   places.
+
+A: CHIP8 programs are not only made of instructions. They can contain some
+   data. The disassembler CANNOT make the difference between the data and the
+   instructions. This is why the data are disassembled as instructions, which
+   can be illegal.
+   Your program can also contain some instructions placed at ODD addresses.
+   As the instructions are supposed to be always placed at EVEN addresses,
+   this may cause some disassembling problems.
+
+
+
+Q: I would like to modify an existant CHIP8 program. How can I do this ?
+
+A: You have several solutions. The best one is to disassemble the program,
+   and then assemble it after having modified it. To insert instructions,
+   refer to the section BINHEX/HEXBIN in CHIP_DOC.ENG.
+
+
+
+Q: Can I change the speed of the emulator ?
+
+A: No. This would not be useful, and could perform errors in some programs
+   using timers instructions.
+
+
+
+Q: Can I redefine the keyboard keys ?
+
+A: No. This would make too many confusions, and the testers didn't find this
+   function useful.
+
+
+
+Q: I have old audio cassettes that contain CHIP8 programs. Can I transfer
+   them on my PC ?
+
+A: Well, if you know a way to do this, yes ! But the emulator package doesn't
+   include any utility to do this.
+
+
+
+Q: I programmed some CHIP8 games. Can they be joined to the emulator ?
+
+A: Sure ! You only have to EMail them to me (winter@worldnet.net), WITH
+   a documentation, even brief.
+
+
+
+Q: I know some internal 1802 function calls. Is it possible to add support
+   for them ?
+
+A: If you can describe the COMPLETE operation of these functions, YES.
+
+
+
+Q: I have some original listings of CHIP-8 programs. Are these usable with
+   the emulator ?
+
+A: Yes, of course. You must type the listing as is, and take the care to
+   separate the bytes by spaces. Once you have typed your file, use HEXBIN
+   to convert it to binary. Then, run the emulator.
+
+
+Q: Are you interested in having a cheap TELMAC 1800, COSMAC VIP or other
+   old machine running CHIP-8 ?
+
+A: YES. I collect old videogame consoles and old computers. Contact me to
+   see what we can do.
+
+
+Q: Are there any known problems with the emulator ?
+
+A: Yes. The help screen cannot be accessed when a program is waiting for a
+   keypress. This should be fixed soon.
+   Another major problem is SPEED. The speed of the original SCHIP interpreter
+   was based on the execution speed of the HP48 processor. Since all the
+   instructions of its processor are not same, it is impossible to emulate
+   SCHIP at a correct speed. Next versions of the emulator will probably
+   allow to set the emulation speed.

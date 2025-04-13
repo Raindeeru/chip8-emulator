@@ -24,7 +24,7 @@ std::uint8_t display_flag;
 std::uint8_t V[16] = {0};
 
 //Superchip stuff
-bool superchip_mode = false;
+bool superchip_mode = true;
 bool hires = false;
 uint8_t flags[8] = {0};
 

@@ -457,7 +457,7 @@ void DrawBigSprite(uint16_t X, uint16_t Y){
             if (clipping && (i + Y_coord) >= 64)
                 break;
 
-            uint16_t sprite_row = ram[I + i*2] + (ram[I + i*2 + 1] << 8);
+            uint16_t sprite_row = ram[I + i*2 + 1] + (ram[I + i*2] << 8);
             for (int b = 0; b < 16; b++)
             {
                 if (clipping && (b + X_coord) >= 128)

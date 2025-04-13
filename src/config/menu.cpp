@@ -35,10 +35,9 @@ void LoadRom(){
     if (SUCCEEDED(hr)) {
         // Set file filters
         COMDLG_FILTERSPEC fileTypes[] = {
-            { L"CHIP-8 ROM Files", L"*.ch8;*.rom" },
             { L"All Files", L"*.*" }
         };
-        pFileOpen->SetFileTypes(2, fileTypes);
+        pFileOpen->SetFileTypes(1, fileTypes);
 
         // Show dialog
         hr = pFileOpen->Show(nullptr);
@@ -80,6 +79,8 @@ void LoadRom(){
         file.read (memblock, size);
         file.close();
 
+
+        std::cout << size;
         memcpy(ram + 0x200, memblock, size);
         std::cout << "the entire file content is in memory\n";
         rom_loaded = true;

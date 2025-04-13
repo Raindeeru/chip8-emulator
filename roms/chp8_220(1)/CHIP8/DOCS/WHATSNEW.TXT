@@ -1,0 +1,146 @@
+2.2.0:
+    - Improvements:
+        * CHIP8.EXE recompiled for 80386-DX PCs and above.
+        * CHIP8 documentations rewritten using Word format (CHIP8.DOC)
+        * CHIP8 french documentations dropped. Took too many bytes ;-)
+        * No more annoying copyright message under emulation...
+        * Snapshots can now have multiple names.
+        * Snapshots now contain current setup of game emulated.
+        * Snapshots are now available in SCHIP mode.
+        * UNCHIP supports these new snapshots.
+        * BINHEX produces more readable files.
+        * HEXBIN has been updated, as requested by BINHEX.
+        * Added support for ETI-660 programs.
+        * Audio tape speed is now correct (100 bytes per second).
+        * VGA graphics are now drawn via direct VRAM access, which is MUCH
+          faster. Some games run much better (ANT...).
+        * SET_CHIP is replaced by SETUP, which is more user-friendly.
+        * Debug informations are now displayed if a crash occurs.
+        * Text mode turned to 50 lines, which increases the speed of the
+          sprite drawing routines.
+        * Sound and delay timers are now time exact, synchronised on the
+          internal PC timer (8253/8254), with 1 millisecond resolution.
+        * Sources are now in CHIPPER syntax for better utilisation.
+        * A CHIP8 and SCHIP games library is now available for the HP48
+          (G/Gx series): SCHIP48.GX.
+
+    - Bugs fixed:
+        * Character '4' of the 4 x 5 font is now correct
+        * Boot-128 is now software accessible, and without register problems
+        * Carry in the SHL instruction (BLINKY now works !)
+        * Collision detection in SCHIP mode
+        * Save/load register/flag instructions
+        * Save/load instructions in UNCHIP
+        * Screen colors are now correct after loading a snapshot
+        * SCHIP instructions are allowed in CHIP-8 mode (scroll instructions
+          only work in VGA mode, NOT TEXT)
+        * Cosmetic bugs (main ones):
+            - VGA screen initialisation
+            - Help screen
+            - Screen capture
+
+    - Games:
+        * BREAKOUT (modified version of BRIX)
+        * DRAGON1, DRAGON2 (codes taken from the HP48 game Single Dragon)
+        * GUESS (small bug fixed after a RESET: the result was wrong)
+        * INVADERS (small bug fixed at end of game)
+        * MINES (a minehunter; full commented sources provided)
+        * PONG2 is somewhat more realistic compared to certain old consoles
+        * SQUARE (magic square, like Okie-Dokie on the Atari 2600)
+        * SQUASH (one of these "PONG" variants which was missing...)
+        * WALL (same...)
+
+2.1.1+:
+    - Fixed: HEXBIN with a serious bug
+
+2.1.1:
+    - Games: SPACE FIGHT, VERS, WORM3
+    - Fixed: CHIP8 with a bug in the 16*16 sprite drawing routine
+
+2.1.0:
+    - Improved: Real CHIP8 keyboard emulation
+    - Games: UBOAT, VBRIX
+
+2.0.0:
+    - Added: SUPER-CHIP (SCHIP) instructions and SCHIP games
+    - Added: Help screen
+    - Fixed: CHIP8 with a bug in the random function. TETRIS now works.
+
+1.1.6:
+    - Docs: Now in the DOC.FR and DOS.ENG directories
+            Orthographic errors in FAQ, GAMES and CHIP_DOC files fixed
+            GAMES.DOC is now FILES.DOC as it doesn't contain only games
+            Several changes in CHIP8.TXT (keyboards, CHIP8 use...)
+    - Fixed: CHIP8 with a bug in the sound_timer instruction
+    - Added: CHIP8.INI config file
+    - Added: Tape sound
+    - Added: 128-Byte CHIP8 boot
+    - Added: CHIPPER CHIP8/CHIP48/SCHIP powerfull symbolic assembler
+    - Improved: CHIP8 with TEXT or VGA (320*200) display
+    - Improved: UNCHIP (now uses the CHIPPER syntax, and options changed)
+    - Games/Programs by me: BLITZ, GUESS, HIDDEN, INVADERS, MAZE, MERLIN
+
+1.1.5:
+    - Fixed: CHIP8 (so DEBUG) with a bug in the Load/Save instructions
+    - Fixed: CHIP8 (so DEBUG) with a bug in the timers countdown delays
+    - Fixed: CHIP8 with a bug in the RESTART key routine
+    - Fixed: TANK with a corruption in its binary image
+
+    - Games: BLINKY (PACMAN clone)
+             TICTAC (TIC-TAC-TOE by me)
+             MISSILE (Shooter by me)
+
+    - Added: Snapshot function
+    - Added: FAQ files, both french and english
+    - Added: Some games sources
+
+    - Changed: Executables version is now CHIP8's version
+
+    - Improved: UNCHIP with disassembling possibilities
+
+    - Corrected: Orthographic errors in DEBUG
+    - Corrected: HISTORY.TXT, CHIP_DOC files and GAMES.DOC
+
+
+1.1.4:
+    - Changed: Versions are now Global.Current.Release (ex: 1.1.4)
+    - Changed: Internal version headers
+    - Corrected: HISTORY.TXT and CHIP_DOC
+    - Added: BINHEX.EXE and HEXBIN.EXE programmer utilities
+    - Added: PONG2, same as PONG but improved by me
+    - Added: Screen-capture function
+    - Removed: TEST file in the GAMES directory
+
+1.1 #3:
+    - Fixed: PUZZLE2 (just a correction to make it work)
+    - Fixed: Bug in program-counter and register I when > 4095
+    - Changed: Blue border
+    - Improved: CARRY/BORROW routines
+    - Added: HISTORY.TXT and GAMES.DOC
+
+1.1 #2:
+    - Improved: Internal CHIP8 code
+
+1.1 #1: FIRST OFFICIAL RELEASE
+
+1.0:
+    - Fixed: Serious bug in XOR function
+    - Added: Synchronisation routine
+
+0.9:
+    - Fixed: Bug in the drawing routine
+    - Fixed: BORROW bug
+        
+0.2 to 0.8: Lots of improvements and debuging
+
+0.1: FIRST STEPS
+
+    - Drawing needs to be much faster
+    - Bad keyboard emulation
+    - Speed not synchronized
+    - LOTS of other bugs to find in:
+        -> Registers save/load instructions
+        -> Register BCD coding in memory
+        -> Games loader
+        -> Beeper routine
+        -> Math instructions (carry/borrow)

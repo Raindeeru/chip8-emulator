@@ -4,6 +4,7 @@
 
 #include <string>
 #include <windows.h>
+#include <vector>
 #include "../../vendored/nlohmann/json.hpp"
 using json = nlohmann::json;
 namespace fs = std::filesystem;
@@ -18,9 +19,11 @@ namespace fs = std::filesystem;
 extern bool rom_loaded;
 extern std::string current_rom;
 extern json current_settings;
+extern std::vector<std::string> recent_files;
 
 void LoadRom();
 void LoadRomFromPath(std::string rom_path);
 void ParseSettings(fs::path settings_path);
 void UpdateQuirk(int quirk, fs::path settings_path);
+void AddRecentFiles(HMENU menubar);
 #endif 

@@ -15,12 +15,15 @@
 #include "menu.h"
 #include <shobjidl.h> 
 #include "../../vendored/nlohmann/json.hpp"
+#include <vector>
 using json = nlohmann::json;
 namespace fs = std::filesystem;
 
 std::string current_rom = "";
 bool rom_loaded = false;
 json current_settings = nullptr;
+
+std::vector<std::string> recent_files = {};
 
 void LoadRom(){
     std::string rom_path;
@@ -68,7 +71,6 @@ void LoadRom(){
     std::ifstream file (rom_path.c_str(), std::ios::in|std::ios::binary|std::ios::ate);
     if (file.is_open())
     {
-
         Chip8_Init();
         loadFont(std_font, ram, 80);
 
@@ -84,6 +86,19 @@ void LoadRom(){
 
 
         delete[] memblock;
+        
+        for(int i = 0; i < recent_files.size(); i++){
+            if (recent_files[i] == rom_path)
+            {
+                recent_files.erase(recent_files.begin() + i);
+            }
+            
+        }
+        recent_files.insert(recent_files.begin(), rom_path);
+        if(recent_files.size() > 10){
+            recent_files.pop_back();
+        }
+
     }
     else std::cout << "Unable to open file";
 }
@@ -113,6 +128,18 @@ void LoadRomFromPath(std::string rom_path){
 
 
         delete[] memblock;
+
+        for(int i = 0; i < recent_files.size(); i++){
+            if (recent_files[i] == rom_path)
+            {
+                recent_files.erase(recent_files.begin() + i);
+            }
+            
+        }
+        recent_files.insert(recent_files.begin(), rom_path);
+        if(recent_files.size() > 10){
+            recent_files.pop_back();
+        }
     }
     else std::cout << "Unable to open file";
 }
@@ -177,4 +204,35 @@ void UpdateQuirk(int quirk, fs::path settings_path){
     clipping = current_settings["Quirks"]["clipping"];
     shifting = current_settings["Quirks"]["shifting"];
     jumping = current_settings["Quirks"]["jumping"];
+}
+
+void AddRecentFiles(HMENU menubar){
+    if(recent_files.size() == 0){
+        return;
+    }
+    HMENU file = GetSubMenu(menubar, 0);
+    HMENU recent_files_menu = GetSubMenu(file, 1);
+
+    if (!recent_files_menu)
+    {
+        MessageBoxW(NULL, L"Recent Roms submenu not found!", L"Error", MB_OK);
+        return;
+    }
+
+    for (int i = 0; i < recent_files.size(); i++)
+    {
+        RemoveMenu(recent_files_menu, 0, MF_BYPOSITION);
+    }
+
+    for (int i = 0; i < recent_files.size(); i++)
+    {
+        std::string narrow = recent_files[i];
+        std::wstring wide(narrow.begin(), narrow.end());
+        BOOL success = AppendMenuW(recent_files_menu, MF_STRING, ID_RECENT_START+i, wide.c_str());
+        if (!success)
+        {
+            MessageBoxW(NULL, L"AppendMenu failed", L"Error", MB_OK | MB_ICONERROR);
+        }
+    }
+    
 }

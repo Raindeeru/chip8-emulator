@@ -4,7 +4,12 @@ IDR_MENU MENU
 BEGIN
     POPUP "File"
     BEGIN
-        MENUITEM "Load Rom", ID_LOAD_ROM
+        MENUITEM "Load Rom\tF1", ID_LOAD_ROM
+        POPUP "Recent Roms"
+        BEGIN
+            MENUITEM "No Recent Files", ID_RECENT_PLACEHOLDER, GRAYED 
+        END
+        MENUITEM "Reload Rom\tF2", ID_RELOAD, GRAYED
     END
     POPUP "Quirks"
     BEGIN

@@ -49,6 +49,9 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case ID_LOAD_ROM:
             std::cout << "Load Rom\n";
             LoadRom();
+            AddRecentFiles(menu);
+            EnableMenuItem(menu, ID_RELOAD, MF_BYCOMMAND | MF_ENABLED);
+            DrawMenuBar(hwnd);
             break;
         case ID_VF_RESET:
             UpdateQuirk(VF_RESET, settings_path);
@@ -117,14 +120,25 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             paused = !paused;
             if(paused){
                 CheckMenuItem(menu, ID_PAUSE, MF_CHECKED);
+                EnableMenuItem(menu, ID_STEP, MF_BYCOMMAND | MF_ENABLED);
+                DrawMenuBar(hwnd);
             }else{
                 CheckMenuItem(menu, ID_PAUSE, MF_UNCHECKED);
+                EnableMenuItem(menu, ID_STEP, MF_BYCOMMAND | MF_GRAYED);
+                DrawMenuBar(hwnd);
             }
             break;
         
         case ID_STEP:
             if(rom_loaded)
                 stepped = true;
+            break;
+        case ID_RELOAD:
+            if (rom_loaded)
+            {
+                LoadRomFromPath(current_rom);
+                AddRecentFiles(menu);
+            }
             break;
 
         default:
@@ -135,6 +149,13 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     IPF = (int)std::round((float)IPS / (float)FPS);
                 }else{
                     CheckMenuItem(menu, i, MF_UNCHECKED);
+                }
+            }
+            //
+            for(int i = 0; i < recent_files.size(); i++){
+                if(LOWORD(wParam == ID_RECENT_START + i)){
+                    LoadRomFromPath(recent_files[i]);
+                    AddRecentFiles(menu);
                 }
             }
             break;
@@ -223,6 +244,10 @@ int main(int argc, char *argv[])
                 CheckMenuItem(menu, i, MF_CHECKED);
         }
 
+        EnableMenuItem(menu, ID_STEP, MF_BYCOMMAND | MF_GRAYED);
+        DrawMenuBar(hwnd);
+
+        AddRecentFiles(menu);
         SetMenu(hwnd, menu);
     }
 
@@ -302,6 +327,21 @@ int main(int argc, char *argv[])
                     stepped = true;
                 if (event.key.repeat == false && event.key.scancode == SDL_SCANCODE_F5)
                     paused = !paused;
+                    if(paused){
+                        EnableMenuItem(menu, ID_STEP, MF_BYCOMMAND | MF_ENABLED);
+                        DrawMenuBar(hwnd);
+                    }else{
+                        EnableMenuItem(menu, ID_STEP, MF_BYCOMMAND | MF_GRAYED);
+                        DrawMenuBar(hwnd);
+                    }
+                if (event.key.repeat == false && event.key.scancode == SDL_SCANCODE_F1){
+                    LoadRom();
+                    AddRecentFiles(menu);
+                }
+                if (event.key.repeat == false && event.key.scancode == SDL_SCANCODE_F2 && rom_loaded){
+                    LoadRomFromPath(current_rom);
+                    AddRecentFiles(menu);
+                }
             case SDL_EVENT_WINDOW_RESIZED:
                 break;
             case SDL_EVENT_MOUSE_BUTTON_DOWN:
@@ -332,7 +372,7 @@ int main(int argc, char *argv[])
 
         int32_t timeToSleep = tickInterval - deltaTime;
 
-        std::cout << "IPF: " << IPF << " IPS: " << IPS << "\n";
+        //std::cout << "IPF: " << IPF << " IPS: " << IPS << "\n";
 
         if (timeToSleep > 0)
         {

@@ -9,7 +9,6 @@ A simple debug has also been implemented
 ## To be implemented
 - Full SuperChip 1.1 support with it's own quirks
 - Automatic detection of ROM metadata from the Chip8 database
-- Recent Roms and Roms in the Menu Bar
-
+- Example Roms
 ---
 After finishing the things to be implemented I will probably move on to either implementing a GameBoy Emulator or a Z80 with PacMan

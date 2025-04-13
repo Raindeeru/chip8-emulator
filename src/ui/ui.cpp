@@ -69,7 +69,7 @@ void RenderChip8Screen(SDL_Window* win, bool rom_loaded, SDL_Texture* tex = NULL
 
                 ImGui::BeginChild("Table", remaining);
 
-                if (ImGui::BeginTable("DummyTable", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+                if (ImGui::BeginTable("Ram", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
                 {
                     for (int row = 0; row < row_count; ++row)
                     {
@@ -77,7 +77,7 @@ void RenderChip8Screen(SDL_Window* win, bool rom_loaded, SDL_Texture* tex = NULL
                         int current_opcode = (ram[current_address] << 8) + ram[current_address+1];
                         ImGui::TableNextRow();
                         ImGui::TableSetColumnIndex(0);
-                        ImGui::Text(((row==0)?"🞂 0x%04x":"0x%04x"), current_address);
+                        ImGui::Text(((row==0)?"> 0x%04x":"0x%04x"), current_address);
                         ImGui::TableSetColumnIndex(1);
                         ImGui::Text("0x%04x", current_opcode);
                     }
@@ -149,12 +149,15 @@ void RenderChip8Screen(SDL_Window* win, bool rom_loaded, SDL_Texture* tex = NULL
 
             ImGui::Separator();
             
-            ImGui::Indent(5.0f);
-            for(int i = 0; i < 16; i++){
-               ImGui::Text("V%x: 0x%04x", i, V[i]); 
+            if (rom_loaded)
+            {
+                ImGui::Indent(5.0f);
+                for (int i = 0; i < 16; i++)
+                {
+                    ImGui::Text("V%x: 0x%04x", i, V[i]);
+                }
+                ImGui::Unindent(5.0f);
             }
-            ImGui::Unindent(5.0f);
-
 
             ImGui::EndChild();
             ImGui::SameLine();
@@ -173,13 +176,15 @@ void RenderChip8Screen(SDL_Window* win, bool rom_loaded, SDL_Texture* tex = NULL
 
             ImGui::Indent(5.0f);
 
-            if(superchip_mode){
+            if(superchip_mode && rom_loaded){
                 for (int i = 0; i < 8; i++)
                 {
                     ImGui::Text("F%x: 0x%02x", i, flags[i]);
                 }
             }else{
-                ImGui::TextWrapped("User Flags Only used in SuperChip");
+                ImGui::TextWrapped(
+                    (rom_loaded ? "User Flags Only used in SuperChip" : "")
+                );
             }
 
             ImGui::Unindent(5.0f);

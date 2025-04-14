@@ -374,7 +374,6 @@ void HiResOff(){
 
 //00CN
 void ScrollDown(uint16_t N){
-    std::cout << "hey down";
     display_flag = 1;
     for (int i = 63-N; i >= 0; i--)
     {
@@ -398,7 +397,6 @@ void ScrollDown(uint16_t N){
 
 //00FB
 void ScrollRight(){
-    std::cout << "hey right";
     display_flag = 1;
     for (int i = 123; i >= 0; i--)
     {
@@ -421,7 +419,6 @@ void ScrollRight(){
 
 //00FC
 void ScrollLeft(){
-    std::cout << "hey left";
     display_flag = 1;
     for (int i = 4; i < 128; i++)
     {

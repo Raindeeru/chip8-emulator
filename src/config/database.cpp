@@ -1,8 +1,15 @@
 #include "database.h"
 #include <iostream>
+#include <fstream>
+#include <ios>
+#include <iosfwd>
+#include <iostream>
 #include <string>
 #include <cstdint>
 #include <sstream>
+#include "../../vendored/nlohmann/json.hpp"
+using json = nlohmann::json;
+namespace fs = std::filesystem;
 #define LENGTH_BYTE_SIZE 8
 
 uint32_t to_uint32_be(const uint8_t* bytes) {
@@ -116,4 +123,20 @@ std::string Sha1(const char *message, uint64_t l){
     free(full_message);
 
     return hh;
+}
+
+int GetProgramIndexFromHash(std::string hash, fs::path hashes_path){
+    std::ifstream f(hashes_path);
+    if (!f) {
+        std::cerr << "Could not open sha1-hashes.json\n";
+        return - 1;
+    }
+
+    json hashes = json::parse(f);
+
+    if(hashes.contains(hash)){
+        return hashes[hash];
+    }else{
+        return -1;
+    }
 }

@@ -31,7 +31,8 @@ add_executable(Chip8
     src/chip8/specs.cpp 
     src/chip8/instructions.cpp 
     src/chip8/input.cpp 
-    src/config/menu.cpp 
+    src/config/menu.cpp
+    src/config/database.cpp 
     src/ui/ui.cpp
     res/resource.h
     vendored/ImGui/imgui_impl_sdl3.cpp
@@ -41,6 +42,11 @@ add_executable(Chip8
     vendored/ImGui/imgui_tables.cpp
     vendored/ImGui/imgui_widgets.cpp
     vendored/ImGui/imgui_demo.cpp
+)
+
+add_executable(test_sha
+    test/test_sha.cpp
+    src/config/database.cpp
 )
 
 # Link to the actual SDL3 library.

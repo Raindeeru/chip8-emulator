@@ -2,6 +2,7 @@
 #include <iostream>
 #include "../../vendored/ImGui/imgui.h"
 #include "../chip8/specs.h"
+#include "../../res/resource.h"
 
 //Left Side of Screen
 #define RAM_WIDTH 200
@@ -176,7 +177,7 @@ void RenderChip8Screen(SDL_Window* win, bool rom_loaded, SDL_Texture* tex = NULL
 
             ImGui::Indent(5.0f);
 
-            if(superchip_mode && rom_loaded){
+            if(mode == ID_SUPERCHIP_LEGACY || mode == ID_SUPERCHIP_MODERN && rom_loaded){
                 for (int i = 0; i < 8; i++)
                 {
                     ImGui::Text("F%x: 0x%02x", i, flags[i]);

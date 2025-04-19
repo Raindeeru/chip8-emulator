@@ -25,7 +25,7 @@ extern std::uint8_t display_flag;
 extern std::uint8_t V[16];
 
 //Superchip stuff
-extern bool superchip_mode;
+extern int mode;
 extern bool hires;
 extern uint8_t flags[8];
 

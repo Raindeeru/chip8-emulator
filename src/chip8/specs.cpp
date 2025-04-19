@@ -1,4 +1,5 @@
 #include "specs.h"
+#include "../../res/resource.h"
 
 #include <cstdint>
 #include <cstring>
@@ -24,7 +25,7 @@ std::uint8_t display_flag;
 std::uint8_t V[16] = {0};
 
 //Superchip stuff
-bool superchip_mode = true;
+int mode = ID_SUPERCHIP_MODERN;
 bool hires = false;
 uint8_t flags[8] = {0};
 

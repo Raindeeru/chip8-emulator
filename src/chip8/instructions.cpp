@@ -1,5 +1,6 @@
 // Here I need to decode the opcodes given in bytes
 #include "instructions.h"
+#include "../../res/resource.h"
 #include "specs.h"
 #include <charconv>
 #include <cstdint>
@@ -363,18 +364,25 @@ void DrawSpriteSuperChip(uint16_t X, uint16_t Y, uint16_t N) {
 //00FF
 void HiResOn(){
     hires = true;
-    ClearDisplay();
+    if (ID_SUPERCHIP_MODERN)
+        ClearDisplay();
 }
 
 //00FE
 void HiResOff(){
     hires = false;
-    ClearDisplay();
+    if (ID_SUPERCHIP_MODERN)
+        ClearDisplay();
 }
 
 //00CN
 void ScrollDown(uint16_t N){
     display_flag = 1;
+    if (mode == ID_SUPERCHIP_MODERN && !hires)
+    {
+        N *= 2;
+    }
+    
     for (int i = 63-N; i >= 0; i--)
     {
         for (int j = 0; j < 128; j++)
@@ -398,18 +406,23 @@ void ScrollDown(uint16_t N){
 //00FB
 void ScrollRight(){
     display_flag = 1;
-    for (int i = 123; i >= 0; i--)
+    int N = 4;
+    if (mode == ID_SUPERCHIP_MODERN && !hires)
+    {
+        N *= 2;
+    }
+    for (int i = 127-N; i >= 0; i--)
     {
         for (int j = 0; j < 64; j++)
         {
-            display_hires[128*j + i+4] = display_hires[128*j + i];
+            display_hires[128*j + i+N] = display_hires[128*j + i];
         }
         
     }
     //Set left rows 0
     for (int i = 0; i < 64; i++)
     {
-        for (int j = 0; j < 4; j++)
+        for (int j = 0; j < N; j++)
         {
             display_hires[128*i + j] = 0;
         }
@@ -420,18 +433,23 @@ void ScrollRight(){
 //00FC
 void ScrollLeft(){
     display_flag = 1;
-    for (int i = 4; i < 128; i++)
+    int N = 4;
+    if (mode == ID_SUPERCHIP_MODERN && !hires)
+    {
+        N *= 2;
+    }
+    for (int i = N; i < 128; i++)
     {
         for (int j = 0; j < 64; j++)
         {
-            display_hires[128*j + i - 4] = display_hires[128*j + i];
+            display_hires[128*j + i - N] = display_hires[128*j + i];
         }
         
     }
     //set right rows 0
     for (int i = 0; i < 64; i++)
     {
-        for (int j = 127; j >= 123; j--)
+        for (int j = 127; j >= 127-N; j--)
         {
             display_hires[128*i + j] = 0;
         }

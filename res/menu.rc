@@ -22,7 +22,12 @@ BEGIN
             MENUITEM "Shifting", ID_SHIFTING
             MENUITEM "Jumping", ID_JUMPING
         END
-        MENUITEM "SuperChip Mode", ID_SUPERCHIP
+        POPUP "Platform"
+        BEGIN
+            MENUITEM "SuperChip Modern", ID_SUPERCHIP_MODERN
+            MENUITEM "SuperChip Legacy", ID_SUPERCHIP_LEGACY
+            MENUITEM "Chip-8", ID_ORIGINAL_CHIP8
+        END
     END
     POPUP "Speed"
     BEGIN

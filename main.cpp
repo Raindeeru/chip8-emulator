@@ -140,11 +140,23 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 AddRecentFiles(menu);
             }
             break;
-        case ID_SUPERCHIP:
-            superchip_mode = !superchip_mode;
-            (superchip_mode)?
-                CheckMenuItem(menu, ID_SUPERCHIP, MF_CHECKED):
-                CheckMenuItem(menu, ID_SUPERCHIP, MF_UNCHECKED);
+        case ID_SUPERCHIP_LEGACY:
+            CheckMenuItem(menu, ID_SUPERCHIP_LEGACY, MF_CHECKED);
+            CheckMenuItem(menu, ID_SUPERCHIP_MODERN, MF_UNCHECKED);
+            CheckMenuItem(menu, ID_ORIGINAL_CHIP8, MF_UNCHECKED);
+            mode = ID_SUPERCHIP_LEGACY;
+            break;
+        case ID_SUPERCHIP_MODERN:
+            CheckMenuItem(menu, ID_SUPERCHIP_LEGACY, MF_UNCHECKED);
+            CheckMenuItem(menu, ID_SUPERCHIP_MODERN, MF_CHECKED);
+            CheckMenuItem(menu, ID_ORIGINAL_CHIP8, MF_UNCHECKED);
+            mode = ID_SUPERCHIP_MODERN;
+            break;
+        case ID_ORIGINAL_CHIP8:
+            CheckMenuItem(menu, ID_SUPERCHIP_LEGACY, MF_UNCHECKED);
+            CheckMenuItem(menu, ID_SUPERCHIP_MODERN, MF_UNCHECKED);
+            CheckMenuItem(menu, ID_ORIGINAL_CHIP8, MF_CHECKED);
+            mode = ID_ORIGINAL_CHIP8;
             break;
         default:
             for(int i = ID_500; i <= ID_1000; i += 100){
@@ -249,7 +261,28 @@ int main(int argc, char *argv[])
                 CheckMenuItem(menu, i, MF_CHECKED);
         }
 
-        (superchip_mode) ? CheckMenuItem(menu, ID_SUPERCHIP, MF_CHECKED) : CheckMenuItem(menu, ID_SUPERCHIP, MF_UNCHECKED);
+
+        switch (mode)
+        {
+        case ID_SUPERCHIP_LEGACY:
+            CheckMenuItem(menu, ID_SUPERCHIP_LEGACY, MF_CHECKED);
+            CheckMenuItem(menu, ID_SUPERCHIP_MODERN, MF_UNCHECKED);
+            CheckMenuItem(menu, ID_ORIGINAL_CHIP8, MF_UNCHECKED);
+            break;
+        case ID_SUPERCHIP_MODERN:
+            CheckMenuItem(menu, ID_SUPERCHIP_LEGACY, MF_UNCHECKED);
+            CheckMenuItem(menu, ID_SUPERCHIP_MODERN, MF_CHECKED);
+            CheckMenuItem(menu, ID_ORIGINAL_CHIP8, MF_UNCHECKED);
+            break;
+        case ID_ORIGINAL_CHIP8:
+            CheckMenuItem(menu, ID_SUPERCHIP_LEGACY, MF_UNCHECKED);
+            CheckMenuItem(menu, ID_SUPERCHIP_MODERN, MF_UNCHECKED);
+            CheckMenuItem(menu, ID_ORIGINAL_CHIP8, MF_CHECKED);
+            break;
+        default:
+            break;
+        }
+
         EnableMenuItem(menu, ID_STEP, MF_BYCOMMAND | MF_GRAYED);
         DrawMenuBar(hwnd);
 
@@ -427,7 +460,7 @@ int main(int argc, char *argv[])
                 opcode += ram[pc + 1];
 
                 pc += 2;
-                if (superchip_mode)
+                if (mode == ID_SUPERCHIP_LEGACY || mode == ID_SUPERCHIP_MODERN)
                 {
                     DecodeOpcodeSuperChip(opcode);
                 }
@@ -450,7 +483,7 @@ int main(int argc, char *argv[])
                 opcode += ram[pc + 1];
 
                 pc += 2;
-                if (superchip_mode)
+                if ((mode == ID_SUPERCHIP_LEGACY) || (mode == ID_SUPERCHIP_MODERN))
                 {
                     DecodeOpcodeSuperChip(opcode);
                 }
@@ -467,7 +500,7 @@ int main(int argc, char *argv[])
         void *rawPixels = NULL;
         int pitch = 0;
 
-        if (superchip_mode)
+        if (mode == ID_SUPERCHIP_LEGACY || mode == ID_SUPERCHIP_MODERN)
         {
             for (int i = 0; i < 128 * 64; i++)
             {
@@ -498,7 +531,7 @@ int main(int argc, char *argv[])
             SDL_UnlockTexture(tex);
         }
 
-        if(superchip_mode)
+        if(mode == ID_SUPERCHIP_LEGACY || mode == ID_SUPERCHIP_MODERN)
             RenderChip8Screen(win, rom_loaded, tex_hires);
         else
             RenderChip8Screen(win, rom_loaded, tex);

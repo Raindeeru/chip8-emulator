@@ -5,4 +5,6 @@
 namespace fs = std::filesystem;
 
 std::string Sha1(const char *message, uint64_t l);
-int GetProgramIndexFromHash(std::string hash, fs::path hashes_path);
+int GetProgramIndexFromHash(std::string hash);
+void LoadDatabaseJson(fs::path database_folder_path);
+std::string GetProgramPlatform(int program_index, std::string hash);

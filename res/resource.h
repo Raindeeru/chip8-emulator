@@ -9,15 +9,13 @@
 
 #define ID_RECENT_START 1400
 
-#define ID_SUPERCHIP 1004
-
 //Quirks
 #define ID_CLIPPING 1101  
 #define ID_MEMORY 1102
 #define ID_DISPLAY_WAIT 1103
 #define ID_SHIFTING 1104
 #define ID_JUMPING 1105
-#define ID_VF_RESET 1106
+#define ID_VF_RESET 1106 //logic
 
 //Speed
 #define ID_500 499
@@ -31,6 +29,11 @@
 #define ID_DEBUG 1201
 #define ID_PAUSE 1202
 #define ID_STEP 1203
+
+//Modes
+#define ID_ORIGINAL_CHIP8 1301
+#define ID_SUPERCHIP_MODERN 1303
+#define ID_SUPERCHIP_LEGACY 1302
 
 
 #endif

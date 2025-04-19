@@ -8,9 +8,18 @@
 #include <cstdint>
 #include <sstream>
 #include "../../vendored/nlohmann/json.hpp"
+#include "menu.h"
 using json = nlohmann::json;
+
 namespace fs = std::filesystem;
 #define LENGTH_BYTE_SIZE 8
+
+json hashes;
+json programs;
+json quirks;
+json platforms;
+
+bool json_loaded = false;
 
 uint32_t to_uint32_be(const uint8_t* bytes) {
     return (uint32_t)bytes[0] << 24 |
@@ -125,18 +134,102 @@ std::string Sha1(const char *message, uint64_t l){
     return hh;
 }
 
-int GetProgramIndexFromHash(std::string hash, fs::path hashes_path){
-    std::ifstream f(hashes_path);
-    if (!f) {
+void LoadDatabaseJson(fs::path database_folder_path){
+    fs::path hashes_path = database_folder_path/"sha1-hashes.json";
+    std::ifstream hashes_file(hashes_path);
+    if (!hashes_file) {
         std::cerr << "Could not open sha1-hashes.json\n";
-        return - 1;
+        return;
     }
+    hashes = json::parse(hashes_file);
 
-    json hashes = json::parse(f);
+    fs::path platforms_path = database_folder_path/"platforms.json";
+    std::ifstream platforms_file(platforms_path);
+    if (!platforms_file) {
+        std::cerr << "Could not open platforms.json\n";
+        return;
+    }
+    platforms = json::parse(platforms_file);
 
+    fs::path quirks_path = database_folder_path/"quirks.json";
+    std::ifstream quirks_file(quirks_path);
+    if (!quirks_file) {
+        std::cerr << "Could not open quirks.json\n";
+        return;
+    }
+    quirks = json::parse(quirks_file);
+
+    fs::path programs_path = database_folder_path/"programs.json";
+    std::ifstream programs_file(programs_path);
+    if (!programs_file) {
+        std::cerr << "Could not open programs.json\n";
+        return;
+    }
+    programs = json::parse(programs_file);
+
+    json_loaded = true;
+}
+
+int GetProgramIndexFromHash(std::string hash){
+    if (!json_loaded)
+    {
+        std::cerr << "Database Json Not Loaded";
+        return -1;
+    }
+    
     if(hashes.contains(hash)){
+        int program_index = hashes[hash];
         return hashes[hash];
     }else{
         return -1;
     }
+}
+
+std::string GetProgramTitle(int program_index){
+    if (!json_loaded)
+    {
+        std::cerr << "Database Json Not Loaded";
+        return "";
+    }
+    if (programs[program_index].contains("title"))
+    {
+        return programs[program_index]["title"];
+    }else{
+        return "";
+    }
+}
+
+std::string GetProgramPlatform(int program_index, std::string hash){
+    if (!json_loaded)
+    {
+        std::cerr << "Database Json Not Loaded";
+        return "";
+    }
+    if (programs[program_index]["roms"].contains(hash))
+    {
+        uint8_t preferred_system = 0;
+
+        for (const std::string &platform : programs[program_index]["roms"][hash]["platforms"])
+        {
+            // put unsupported systems here
+            // will i ever suppor xo chip? probably not
+            if (platform == "xochip" ||
+                platform == "megachip8" ||
+                platform == "chip8x" ||
+                platform == "hybridVIP" ||
+                platform == "superchip1")
+            {
+                return "Platform Not Supported";
+            }
+            return platform;
+
+        }
+    }else{
+        return "";
+    }
+
+}
+
+void UpdatePlatformSpecificQuirks(std::string platform){
+
 }

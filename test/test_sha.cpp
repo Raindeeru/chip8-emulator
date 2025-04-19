@@ -12,9 +12,11 @@ namespace fs = std::filesystem;
 int main(int argc, char *argv[]){
     std::string test = Sha1("test", 4);
     fs::path exe_path = fs::path(argv[0]).parent_path();
-    fs::path hashes= exe_path / "database/sha1-hashes.json";
+    fs::path database_path= exe_path / "database";
     std::string test_hash = "ea9af3c09b0d9e265fcd92bcc5d51a2939fdf27a";
-    int t = GetProgramIndexFromHash(test_hash, hashes);
 
-    std::cout << t;
+    LoadDatabaseJson(database_path);
+    int t = GetProgramIndexFromHash(test_hash);
+    std::string platform = GetProgramPlatform(t, test_hash);
+    std::cout << platform;
 }

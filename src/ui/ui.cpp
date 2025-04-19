@@ -92,7 +92,6 @@ void RenderChip8Screen(SDL_Window* win, bool rom_loaded, SDL_Texture* tex = NULL
             ImGui::SameLine();
         }
         {
-            //std::cout << "width " << width << "height " << height << "\n";
             if (debug_mode)
             {
                 ImGui::BeginChild("Chip8 Screen",
@@ -215,7 +214,6 @@ void ToggleDebug(SDL_Window* win){
         SDL_GetWindowSize(win, &width, &height);
 
         SDL_SetWindowMinimumSize(win, 640, 320);
-        std::cout << width - DEBUG_ADDED_WIDTH << "\n";
         SDL_SetWindowSize(win, width - DEBUG_ADDED_WIDTH, height);
     }
 }

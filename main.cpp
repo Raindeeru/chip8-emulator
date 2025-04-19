@@ -33,6 +33,7 @@ namespace fs = std::filesystem;
 bool running = false;
 WNDPROC SDLWndProc = nullptr;
 fs::path settings_path;
+fs::path flags_path;
 HMENU menu = NULL;
 SDL_Window* win;
 
@@ -168,7 +169,6 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     CheckMenuItem(menu, i, MF_UNCHECKED);
                 }
             }
-            //
             for(int i = 0; i < recent_files.size(); i++){
                 if(LOWORD(wParam == ID_RECENT_START + i)){
                     LoadRomFromPath(recent_files[i]);
@@ -189,7 +189,10 @@ int main(int argc, char *argv[])
     IPS = ID_700 + 1; //I defined the speed id to be the speed - 1
     fs::path exe_path = fs::path(argv[0]).parent_path();
     settings_path = exe_path / "settings.json";
+    flags_path = exe_path / "flags.json";
+
     ParseSettings(settings_path);
+    LoadFlags(flags_path);
     MSG msg = {};
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -411,8 +414,6 @@ int main(int argc, char *argv[])
 
         int32_t timeToSleep = tickInterval - deltaTime;
 
-        //std::cout << "IPF: " << IPF << " IPS: " << IPS << "\n";
-
         if (timeToSleep > 0)
         {
             SDL_Delay(timeToSleep);
@@ -541,6 +542,9 @@ int main(int argc, char *argv[])
         ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
         SDL_RenderPresent(renderer); 
     }
+
+    SaveConfig(settings_path);
+    SaveFlags(flags_path);
 
     SDL_DestroyWindow(win);
     SDL_DestroyRenderer(renderer);

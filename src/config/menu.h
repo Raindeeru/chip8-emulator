@@ -26,4 +26,7 @@ void LoadRomFromPath(std::string rom_path);
 void ParseSettings(fs::path settings_path);
 void UpdateQuirk(int quirk, fs::path settings_path);
 void AddRecentFiles(HMENU menubar);
+void SaveConfig(fs::path settings_path);
+void SaveFlags(fs::path flags_path);
+void LoadFlags(fs::path flags_path);
 #endif 

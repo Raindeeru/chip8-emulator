@@ -68,7 +68,6 @@ std::string Sha1(const char *message, uint64_t l){
     {
         printf("%02x ", (unsigned char)full_message[i]);
     }
-    std::cout << "\n"; 
 
     for (size_t i = 0; i < total; i+=64)
     {
@@ -92,7 +91,6 @@ std::string Sha1(const char *message, uint64_t l){
 
         for (size_t j = 0; j < 80; j++)
         {
-            std::cout << "i: " << j << std::hex << " a: " << a << " b: " << b << " c: " << c << " d: " << d << " e: " << e << "\n";
             uint32_t f = 0;
             uint32_t k = 0;
             if(j < 20){

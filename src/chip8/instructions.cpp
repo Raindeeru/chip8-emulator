@@ -310,25 +310,41 @@ void DrawSpriteSuperChip(uint16_t X, uint16_t Y, uint16_t N) {
     uint8_t Y_coord = hires ? V[Y] % 64 : V[Y] % 32;
     V[0xF] = 0;
 
-    if(hires){
+    if (hires)
+    {
+        uint8_t collisions = 0;
         for (int i = 0; i < N; i++)
         {
-            if (clipping && (i + Y_coord) >= 64)
-                break;
+            if ((i + Y_coord) >= 64)
+            {
+                collisions++; // Clipped row
+                continue;
+            }
 
             uint8_t sprite_row = ram[I + i];
+            bool row_collision = false;
+
             for (int b = 0; b < 8; b++)
             {
-                if (clipping && (b + X_coord) >= 128)
-                    break;
+                if ((b + X_coord) >= 128)
+                    break; // Pixels clipped at the right aren't counted per the quirk
+
                 uint8_t current_bit = (sprite_row >> (7 - b)) & 1;
                 uint16_t index = ((Y_coord + i) % 64) * 128 + ((X_coord + b) % 128);
+
                 if (current_bit && display_hires[index])
-                    V[0xF] = 0x1;
+                    row_collision = true;
+
                 display_hires[index] ^= current_bit;
             }
+
+            if (row_collision)
+                collisions++;
         }
-    }else{
+        V[0xF] = collisions;
+    }
+    else
+    {
         for (int i = 0; i < N; i++)
         {
             if (clipping && (i + Y_coord) >= 32)
@@ -358,7 +374,6 @@ void DrawSpriteSuperChip(uint16_t X, uint16_t Y, uint16_t N) {
             }
         }
     }
-    
 }
 
 //00FF
@@ -465,26 +480,44 @@ void DrawBigSprite(uint16_t X, uint16_t Y){
     uint8_t X_coord = hires ? V[X] % 128 : V[X] % 64;
     uint8_t Y_coord = hires ? V[Y] % 64 : V[Y] % 32;
     V[0xF] = 0;
-    if(hires){
-        //Draw 16x16 sprite
+    if (hires)
+    {
+        uint8_t collisions = 0;
+
+        // Draw 16x16 sprite (each row is 2 bytes)
         for (int i = 0; i < 16; i++)
         {
-            if (clipping && (i + Y_coord) >= 64)
-                break;
+            if ((i + Y_coord) >= 64)
+            {
+                collisions++; // Bottom clipping quirk
+                continue;
+            }
 
-            uint16_t sprite_row = ram[I + i*2 + 1] + (ram[I + i*2] << 8);
+            uint16_t sprite_row = ram[I + i * 2 + 1] + (ram[I + i * 2] << 8);
+            bool row_collision = false;
+
             for (int b = 0; b < 16; b++)
             {
-                if (clipping && (b + X_coord) >= 128)
+                if ((b + X_coord) >= 128)
                     break;
+
                 uint8_t current_bit = (sprite_row >> (15 - b)) & 1;
                 uint16_t index = ((Y_coord + i) % 64) * 128 + ((X_coord + b) % 128);
+
                 if (current_bit && display_hires[index])
-                    V[0xF] = 0x1;
+                    row_collision = true;
+
                 display_hires[index] ^= current_bit;
             }
+
+            if (row_collision)
+                collisions++;
         }
-    }else{
+
+        V[0xF] = collisions;
+    }
+    else
+    {
         //Draw 8x16 sprite
         for (int i = 0; i < 16; i++)
         {
@@ -514,7 +547,6 @@ void DrawBigSprite(uint16_t X, uint16_t Y){
                 }                
             }
         }
-
     }
 }
 
@@ -546,8 +578,19 @@ void LoadFlags(uint16_t X){
 }
 
 //00FD
-void Exit(){
-
+void Reset(){
+    memset(stack, 0, sizeof(stack));
+    memset(display, 0, sizeof(display));
+    memset(display_hires, 0, sizeof(display_hires));
+    memset(keymap, 0, sizeof(keymap));
+    memset(keystate, 0, sizeof(keystate));
+    pc = 0x200;
+    display_flag = 0;
+    I = 0x0;
+    delay = 0;
+    sound = 0;
+    sp = -1;
+    hires = false;
 }
 
 void DecodeOpcode(uint16_t opcode) {
@@ -722,7 +765,10 @@ void DecodeOpcodeSuperChip(uint16_t opcode) {
                 ScrollLeft();
                 break;
             case 0x0FD:
-                Exit();
+                Reset();
+                break;
+            case 0x000:
+                Reset();
                 break;
             default:
                 if((NNN & 0xFF0) == 0x0C0){

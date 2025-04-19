@@ -53,6 +53,7 @@ add_executable(test_sha
 target_link_libraries(Chip8 PRIVATE SDL3_ttf::SDL3_ttf SDL3::SDL3 user32 gdi32)
 
 configure_file(res/settings.json ${CMAKE_BINARY_DIR}/Debug/settings.json COPYONLY)
+configure_file(res/flags.json ${CMAKE_BINARY_DIR}/Debug/flags.json COPYONLY)
 
 configure_file(res/database/platforms.json ${CMAKE_BINARY_DIR}/Debug/database/platforms.json COPYONLY)
 configure_file(res/database/programs.json ${CMAKE_BINARY_DIR}/Debug/database/programs.json COPYONLY)

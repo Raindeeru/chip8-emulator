@@ -158,13 +158,10 @@ void ParseSettings(fs::path settings_path){
     clipping = settings["Quirks"]["clipping"];
     shifting = settings["Quirks"]["shifting"];
     jumping = settings["Quirks"]["jumping"];
-    current_settings = settings;
+    recent_files = settings["RecentFiles"];
+    mode = settings["Mode"];
 
-    for (int i = 0; i < 8; i++)
-    {
-        flags[i] = settings["Flags"][i];
-    }
-    
+    current_settings = settings;
 }
 
 void UpdateQuirk(int quirk, fs::path settings_path){
@@ -236,4 +233,59 @@ void AddRecentFiles(HMENU menubar){
         }
     }
     
+}
+
+void SaveConfig(fs::path settings_path){
+    std::cout << "Saving to: " << settings_path << '\n';
+    std::ofstream f(settings_path);
+    if (!f) {
+        std::cerr << "Could not open settings.json\n";
+        return;
+    }
+    if(recent_files.size() != 0){
+        current_settings["RecentFiles"] = recent_files;
+    }
+
+    current_settings["Mode"] = mode;
+
+    f << current_settings.dump(4);
+    f.close();
+}
+
+void LoadFlags(fs::path flags_path){
+    std::ifstream f(flags_path);
+    if (!f) {
+        std::cerr << "Could not open flags.json\n";
+        return;
+    }
+    json json_flags = json::parse(f);
+
+    if (!json_flags.is_array()){
+        std::cerr << "Wrong Format in Settings, Cannot Load";
+        f.close();
+        return;
+    }
+
+    for (size_t i = 0; i <8; ++i) {
+        int val = json_flags[i].get<int>();
+        if (val < 0 || val > 255) {
+            std::cerr << "Value out of range for uint8_t at index " << i << ": " << val << "\n";
+            f.close();
+            return;
+        }
+        flags[i] = static_cast<uint8_t>(val);
+    }
+    f.close();
+}
+
+void SaveFlags(fs::path flags_path){
+    std::ofstream f(flags_path);
+    if (!f) {
+        std::cerr << "Could not open flags.json\n";
+        return;
+    }
+    json json_flags = flags;
+
+    f << json_flags.dump(4);
+    f.close();
 }

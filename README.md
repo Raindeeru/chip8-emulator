@@ -16,3 +16,5 @@ A simple debug has also been implemented
 Right now I have put everything that I planned to put in and a little bit more. I initially just wanted to make the bare minimum of the original chip-8 emulator. This is far from perfect or even done, and i think that I have a few bugs but I'm calling this "finished" for now
 
 I will probably move on to either implementing a GameBoy Emulator or a Z80 with PacMan
+
+If you want to build this use MSVC for cmake, I have learned my lesson for my next project I'm using gnu

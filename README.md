@@ -7,10 +7,12 @@ The emulator (probably) has support for the Original Chip-8, Superchip 1.1, and 
 As far as I know all Superchip functionality works but I cant guarantee it really.
 For the original chip-8 I have found games that utilize the 0NNN instruction, and no I am not implementing that.
 
+I also not going to implement the database thing anymore because wtf was that database??
+
 A simple debug has also been implemented
 
-## To be implemented
-- Automatic detection of ROM metadata from the Chip8 database
-- Example Roms
+
 ---
-After finishing the things to be implemented I will probably move on to either implementing a GameBoy Emulator or a Z80 with PacMan
+Right now I have put everything that I planned to put in and a little bit more. I initially just wanted to make the bare minimum of the original chip-8 emulator. This is far from perfect or even done, and i think that I have a few bugs but I'm calling this "finished" for now
+
+I will probably move on to either implementing a GameBoy Emulator or a Z80 with PacMan

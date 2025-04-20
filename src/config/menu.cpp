@@ -164,7 +164,7 @@ void ParseSettings(fs::path settings_path){
     current_settings = settings;
 }
 
-void UpdateQuirk(int quirk, fs::path settings_path){
+void UpdateQuirk(int quirk, fs::path settings_path, bool state){
     std::ofstream f(settings_path);
     if (!f) {
         std::cerr << "Could not open settings.json\n";
@@ -173,22 +173,22 @@ void UpdateQuirk(int quirk, fs::path settings_path){
     switch (quirk)
     {
     case VF_RESET:
-        current_settings["Quirks"]["vf_reset"] = !current_settings["Quirks"]["vf_reset"];
+        current_settings["Quirks"]["vf_reset"] = state;
         break;
     case MEMORY:
-        current_settings["Quirks"]["memory"] = !current_settings["Quirks"]["memory"];
+        current_settings["Quirks"]["memory"] = state;
         break;
     case DISPLAY_WAIT: 
-        current_settings["Quirks"]["display_wait"] = !current_settings["Quirks"]["display_wait"];
+        current_settings["Quirks"]["display_wait"] = state;
         break;
     case CLIPPING:
-        current_settings["Quirks"]["clipping"] = !current_settings["Quirks"]["clipping"];
+        current_settings["Quirks"]["clipping"] = state;
         break;
     case SHIFTING:
-        current_settings["Quirks"]["shifting"] = !current_settings["Quirks"]["shifting"];
+        current_settings["Quirks"]["shifting"] = state; 
         break;
     case JUMPING:
-        current_settings["Quirks"]["jumping"] = !current_settings["Quirks"]["jumping"];
+        current_settings["Quirks"]["jumping"] = state; 
         break;
     
     default:

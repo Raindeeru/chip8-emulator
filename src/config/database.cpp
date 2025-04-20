@@ -9,7 +9,10 @@
 #include <sstream>
 #include "../../vendored/nlohmann/json.hpp"
 #include "menu.h"
+#include "../chip8/specs.h"
+#include "../../res/resource.h"
 using json = nlohmann::json;
+namespace fs = std::filesystem;
 
 namespace fs = std::filesystem;
 #define LENGTH_BYTE_SIZE 8
@@ -228,6 +231,51 @@ std::string GetProgramPlatform(int program_index, std::string hash){
 
 }
 
-void UpdatePlatformSpecificQuirks(std::string platform){
+void UpdatePlatformQuirks(std::string platform, fs::path settings_path){
+    if (platform == "originalChip8")
+    {
+        UpdateQuirk(SHIFTING, settings_path, false);
+        UpdateQuirk(MEMORY, settings_path, false);
+        UpdateQuirk(CLIPPING, settings_path, true);
+        UpdateQuirk(JUMPING, settings_path, false);
+        UpdateQuirk(DISPLAY_WAIT, settings_path, true);
+        UpdateQuirk(VF_RESET, settings_path, true);
+    }else if (platform == "modernChip8")
+    {
+        UpdateQuirk(SHIFTING, settings_path, false);
+        UpdateQuirk(MEMORY, settings_path, true);
+        UpdateQuirk(CLIPPING, settings_path, true);
+        UpdateQuirk(JUMPING, settings_path, false);
+        UpdateQuirk(DISPLAY_WAIT, settings_path, true);
+        UpdateQuirk(VF_RESET, settings_path, true);
+    }else if (platform == "superchip" || platform == "superchip1")
+    {
+        if (mode == ID_SUPERCHIP_MODERN)
+        {
+            UpdateQuirk(SHIFTING, settings_path, true);
+            UpdateQuirk(MEMORY, settings_path, false);
+            UpdateQuirk(CLIPPING, settings_path, true);
+            UpdateQuirk(JUMPING, settings_path, true);
+            UpdateQuirk(DISPLAY_WAIT, settings_path, false);
+            UpdateQuirk(VF_RESET, settings_path, false);
+        }else if (mode == ID_SUPERCHIP_LEGACY){
+            UpdateQuirk(SHIFTING, settings_path, true);
+            UpdateQuirk(MEMORY, settings_path, false);
+            UpdateQuirk(CLIPPING, settings_path, false);
+            UpdateQuirk(JUMPING, settings_path, true);
+            UpdateQuirk(DISPLAY_WAIT, settings_path, true);
+            UpdateQuirk(VF_RESET, settings_path, false);
 
+        }
+    }
+}
+
+void UpdatePlatform(std::string platform){
+    if(platform == "originalChip8" || platform == "modernChip8"){
+       mode = ID_ORIGINAL_CHIP8; 
+    }
+    if (platform == "superchip" || platform == "superchip1")
+    {
+        mode = ID_SUPERCHIP_MODERN;
+    }
 }

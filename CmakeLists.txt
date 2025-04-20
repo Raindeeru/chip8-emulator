@@ -44,11 +44,6 @@ add_executable(Chip8
     vendored/ImGui/imgui_demo.cpp
 )
 
-add_executable(test_sha
-    test/test_sha.cpp
-    src/config/database.cpp
-)
-
 # Link to the actual SDL3 library.
 target_link_libraries(Chip8 PRIVATE SDL3_ttf::SDL3_ttf SDL3::SDL3 user32 gdi32)
 

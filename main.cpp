@@ -22,6 +22,7 @@
 #include "vendored/ImGui/imgui.h"
 #include "vendored/ImGui/imgui_impl_sdl3.h"
 #include "vendored/ImGui/imgui_impl_sdlrenderer3.h"
+#include "src/config/database.h"
 namespace fs = std::filesystem;
 
 #define PIXEL_SCALE 10
@@ -48,14 +49,13 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         switch (LOWORD(wParam))
         {
         case ID_LOAD_ROM:
-            std::cout << "Load Rom\n";
             LoadRom();
             AddRecentFiles(menu);
             EnableMenuItem(menu, ID_RELOAD, MF_BYCOMMAND | MF_ENABLED);
             DrawMenuBar(hwnd);
             break;
         case ID_VF_RESET:
-            UpdateQuirk(VF_RESET, settings_path);
+            UpdateQuirk(VF_RESET, settings_path, !current_settings["Quirks"]["vf_reset"]);
             if (current_settings["Quirks"]["vf_reset"])
                 CheckMenuItem(menu, ID_VF_RESET, MF_CHECKED);
             else
@@ -64,7 +64,7 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 LoadRomFromPath(current_rom);
             break;
         case ID_MEMORY:
-            UpdateQuirk(MEMORY, settings_path);
+            UpdateQuirk(MEMORY, settings_path, !current_settings["Quirks"]["memory"]);
             if (current_settings["Quirks"]["memory"])
                 CheckMenuItem(menu, ID_MEMORY, MF_CHECKED);
             else
@@ -73,7 +73,7 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 LoadRomFromPath(current_rom);
             break;
         case ID_DISPLAY_WAIT:
-            UpdateQuirk(DISPLAY_WAIT, settings_path);
+            UpdateQuirk(DISPLAY_WAIT, settings_path, !current_settings["Quirks"]["display_wait"]);
             if (current_settings["Quirks"]["display_wait"])
                 CheckMenuItem(menu, ID_DISPLAY_WAIT, MF_CHECKED);
             else
@@ -82,7 +82,7 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 LoadRomFromPath(current_rom);
             break;
         case ID_CLIPPING:
-            UpdateQuirk(CLIPPING, settings_path);
+            UpdateQuirk(CLIPPING, settings_path, !current_settings["Quirks"]["clipping"]);
             if (current_settings["Quirks"]["clipping"])
                 CheckMenuItem(menu, ID_CLIPPING, MF_CHECKED);
             else
@@ -91,7 +91,7 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 LoadRomFromPath(current_rom);
             break;
         case ID_SHIFTING:
-            UpdateQuirk(SHIFTING, settings_path);
+            UpdateQuirk(SHIFTING, settings_path, !current_settings["Quirks"]["shifting"]);
             if (current_settings["Quirks"]["shifting"])
                 CheckMenuItem(menu, ID_SHIFTING, MF_CHECKED);
             else
@@ -100,7 +100,7 @@ LRESULT APIENTRY MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 LoadRomFromPath(current_rom);
             break;
         case ID_JUMPING:
-            UpdateQuirk(JUMPING, settings_path);
+            UpdateQuirk(JUMPING, settings_path, !current_settings["Quirks"]["jumping"]);
             if (current_settings["Quirks"]["jumping"])
                 CheckMenuItem(menu, ID_JUMPING, MF_CHECKED);
             else
@@ -190,7 +190,6 @@ int main(int argc, char *argv[])
     fs::path exe_path = fs::path(argv[0]).parent_path();
     settings_path = exe_path / "settings.json";
     flags_path = exe_path / "flags.json";
-
     ParseSettings(settings_path);
     LoadFlags(flags_path);
     MSG msg = {};

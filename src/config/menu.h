@@ -24,7 +24,7 @@ extern std::vector<std::string> recent_files;
 void LoadRom();
 void LoadRomFromPath(std::string rom_path);
 void ParseSettings(fs::path settings_path);
-void UpdateQuirk(int quirk, fs::path settings_path);
+void UpdateQuirk(int quirk, fs::path settings_path, bool state);
 void AddRecentFiles(HMENU menubar);
 void SaveConfig(fs::path settings_path);
 void SaveFlags(fs::path flags_path);

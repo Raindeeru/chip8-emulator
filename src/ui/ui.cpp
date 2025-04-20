@@ -9,8 +9,9 @@
 //Right Side of Screen
 #define REGISTER_WIDTH 100
 #define FLAG_WIDTH 100
+#define STACK_WIDTH 100
 
-#define DEBUG_ADDED_WIDTH (RAM_WIDTH + REGISTER_WIDTH + FLAG_WIDTH)
+#define DEBUG_ADDED_WIDTH (RAM_WIDTH + REGISTER_WIDTH + FLAG_WIDTH + STACK_WIDTH)
 #define DEBUG_ADDED_HEIGHT 200
 
 //This rect's position will always be 0,0 and grow depending on the window size
@@ -155,6 +156,35 @@ void RenderChip8Screen(SDL_Window* win, bool rom_loaded, SDL_Texture* tex = NULL
                 for (int i = 0; i < 16; i++)
                 {
                     ImGui::Text("V%x: 0x%04x", i, V[i]);
+                }
+                ImGui::Unindent(5.0f);
+                ImGui::Separator();
+                ImGui::Text("I: 0x%04x", I);
+                ImGui::Text("PC: 0x%04x", pc);
+                ImGui::Text("DELAY: 0x%02x", delay);
+                ImGui::Text("SOUND: 0x%02x", sound);
+            }
+
+            ImGui::EndChild();
+            ImGui::SameLine();
+
+
+            ImGui::BeginChild("Stack", ImVec2(STACK_WIDTH,height),
+                ImGuiChildFlags_Border
+            );
+
+            ImGui::Indent(5.0f);
+            ImGui::Text("Stack");
+            ImGui::Unindent(5.0f);
+
+            ImGui::Separator();
+            
+            if (rom_loaded)
+            {
+                ImGui::Indent(5.0f);
+                for (int i = 0; i < sp; i++)
+                {
+                    ImGui::Text("%x: 0x%04x", i, stack[i]);
                 }
                 ImGui::Unindent(5.0f);
             }
